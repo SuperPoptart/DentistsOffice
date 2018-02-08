@@ -3,7 +3,7 @@ package Model;
 /**
  * represents a person
  */
-public class PersonImpl implements Person {
+public class PersonImpl implements Person, Comparable {
 
     private String firstName;
     private String lastName;
@@ -90,5 +90,23 @@ public class PersonImpl implements Person {
             throw new IllegalArgumentException("You need an ID number greater than 0");
         }
         this.ID = ID;
+    }
+
+    public boolean equals(Object o) {
+        PersonImpl other = (PersonImpl) o;
+        if (other.getFirstName().equals(this.getFirstName()) && other.getLastName().equals(this.getLastName()) && other.getID() == this.getID()) {
+            return true;
+        } else return false;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        PersonImpl other = (PersonImpl) o;
+        return other.getID() - this.getID();
+    }
+
+    @Override
+    public String toString() {
+        return this.getFirstName() + ", " + this.getLastName() + ", " + this.getID();
     }
 }
