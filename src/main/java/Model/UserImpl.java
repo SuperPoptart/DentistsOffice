@@ -8,8 +8,17 @@ public class UserImpl {
     private String password;
     private boolean admin;
 
+    /**
+     * default constructor
+     */
     public UserImpl() {}
 
+    /**
+     * overloaded constructor
+     * @param uName user name
+     * @param pWord password
+     * @param admin is admin
+     */
     public UserImpl(String uName, String pWord, boolean admin) {
         this.setUsername(uName);
         this.setPassword(pWord);
