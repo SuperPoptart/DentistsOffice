@@ -11,5 +11,5 @@ public interface Procedure {
     public void setDescription(String d);
     public double getAmount();
     public void setAmount(double a);
-    
+
 }
