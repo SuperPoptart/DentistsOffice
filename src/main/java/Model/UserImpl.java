@@ -4,6 +4,7 @@ package Model;
  * Models a user
  */
 public class UserImpl {
+
     private String username;
     private String password;
     private boolean admin;
