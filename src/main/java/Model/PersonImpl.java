@@ -29,10 +29,20 @@ public class PersonImpl implements Person {
 
     }
 
+    /**
+     * gets the first name
+     *
+     * @return first name
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * sets the first name
+     *
+     * @param firstName first name
+     */
     public void setFirstName(String firstName) {
         if (firstName == null || firstName.isEmpty()) {
             throw new IllegalArgumentException("You need to enter a first name");
@@ -42,6 +52,7 @@ public class PersonImpl implements Person {
 
     /**
      * gets the last name
+     *
      * @return last name
      */
     public String getLastName() {
@@ -50,6 +61,7 @@ public class PersonImpl implements Person {
 
     /**
      * sets the last name
+     *
      * @param lastName last name
      */
     public void setLastName(String lastName) {
@@ -61,6 +73,7 @@ public class PersonImpl implements Person {
 
     /**
      * gets an ID
+     *
      * @return ID
      */
     public int getID() {
@@ -69,6 +82,7 @@ public class PersonImpl implements Person {
 
     /**
      * sets an ID number
+     *
      * @param ID ID number
      */
     public void setID(int ID) {
