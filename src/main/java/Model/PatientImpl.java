@@ -3,7 +3,7 @@ package Model;
 /**
  * represents a patient
  */
-public class PatientImpl extends PersonImpl {
+public class PatientImpl extends PersonImpl implements Patient {
 
     private String firstName;
     private String lastName;
@@ -44,6 +44,11 @@ public class PatientImpl extends PersonImpl {
         return phoneNumber;
     }
 
+    /**
+     * sets phone number
+     *
+     * @param phoneNumber phone number
+     */
     public void setPhoneNumber(long phoneNumber) {
         if (phoneNumber < 1000000000) {
             throw new IllegalArgumentException("Every phone number is 14 digits long and must start with one or greater!");
@@ -60,6 +65,11 @@ public class PatientImpl extends PersonImpl {
         return insurance;
     }
 
+    /**
+     * sets insurance
+     *
+     * @param insurance insurance
+     */
     public void setInsurance(Insurance insurance) {
         if (insurance == null) {
             throw new IllegalArgumentException("You must enter an insurance");
@@ -88,4 +98,8 @@ public class PatientImpl extends PersonImpl {
         this.paymentCard = paymentCard;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + ", " + this.getPaymentCard() + ", " + this.getPhoneNumber() + ", " + this.getInsurance().toString();
+    }
 }
