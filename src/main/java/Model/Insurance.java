@@ -87,4 +87,9 @@ public class Insurance {
     public void setMemberID(String memberID) {
         this.memberID = memberID;
     }
+
+    @Override
+    public String toString() {
+        return this.getCompanyName() + ", " + this.getGroupID() + ", " + this.getMemberID();
+    }
 }
