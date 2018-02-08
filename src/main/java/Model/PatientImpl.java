@@ -50,6 +50,10 @@ public class PatientImpl extends PersonImpl {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * gets insurance
+     * @return insurance
+     */
     public Insurance getInsurance() {
         return insurance;
     }
