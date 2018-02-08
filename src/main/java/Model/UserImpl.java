@@ -11,10 +11,12 @@ public class UserImpl {
     /**
      * default constructor
      */
-    public UserImpl() {}
+    public UserImpl() {
+    }
 
     /**
      * overloaded constructor
+     *
      * @param uName user name
      * @param pWord password
      * @param admin is admin
@@ -27,6 +29,7 @@ public class UserImpl {
 
     /**
      * gets username
+     *
      * @return username
      */
     public String getUsername() {
@@ -35,10 +38,11 @@ public class UserImpl {
 
     /**
      * sets this username
+     *
      * @param username
      */
     public void setUsername(String username) {
-        if(username.equals("") || username == null) {
+        if (username.equals("") || username == null) {
             throw new IllegalArgumentException("username must not be null or empty");
         }
         this.username = username;
@@ -46,6 +50,7 @@ public class UserImpl {
 
     /**
      * gets password
+     *
      * @return password
      */
     public String getPassword() {
@@ -54,10 +59,11 @@ public class UserImpl {
 
     /**
      * sets this password
+     *
      * @param password
      */
     public void setPassword(String password) {
-        if(password.equals("") || password == null) {
+        if (password.equals("") || password == null) {
             throw new IllegalArgumentException("Password must not be null or empty");
         }
         this.password = password;
@@ -65,6 +71,7 @@ public class UserImpl {
 
     /**
      * gets Admin
+     *
      * @return admin
      */
     public boolean isAdmin() {
@@ -73,6 +80,7 @@ public class UserImpl {
 
     /**
      * sets admin
+     *
      * @param admin
      */
     public void setAdmin(boolean admin) {
