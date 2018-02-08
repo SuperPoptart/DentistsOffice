@@ -3,8 +3,7 @@ package Model;
 /**
  * Models a user
  */
-public class UserImpl {
-
+public class UserImpl implements User{
     private String username;
     private String password;
     private boolean admin;
