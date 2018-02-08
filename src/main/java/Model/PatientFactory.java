@@ -20,12 +20,12 @@ public class PatientFactory {
      * @param lName     last name
      * @param Id        ID
      * @param pNum      phone number
-     * @param insurance insurance info
+     * @param insuranceImpl insuranceImpl info
      * @param pCard     payment card
      * @return patient with info
      */
-    public static Patient getInstance(String fName, String lName, int Id, long pNum, Insurance insurance, String pCard) {
-        return new PatientImpl(fName, lName, Id, pNum, insurance, pCard);
+    public static Patient getInstance(String fName, String lName, int Id, long pNum, InsuranceImpl insuranceImpl, String pCard) {
+        return new PatientImpl(fName, lName, Id, pNum, insuranceImpl, pCard);
     }
 
 

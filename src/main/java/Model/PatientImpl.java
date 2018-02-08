@@ -9,7 +9,7 @@ public class PatientImpl extends PersonImpl implements Patient {
     private String lastName;
     private int ID;
     private long phoneNumber;
-    private Insurance insurance;
+    private InsuranceImpl insuranceImpl;
     private String paymentCard;
 
     /**
@@ -25,13 +25,13 @@ public class PatientImpl extends PersonImpl implements Patient {
      * @param lName     last name
      * @param ID        ID
      * @param pNum      phone number
-     * @param insurance insurance info
+     * @param insuranceImpl insuranceImpl info
      * @param pCard     payment card
      */
-    public PatientImpl(String fName, String lName, int ID, long pNum, Insurance insurance, String pCard) {
+    public PatientImpl(String fName, String lName, int ID, long pNum, InsuranceImpl insuranceImpl, String pCard) {
         super(fName, lName, ID);
         this.setPhoneNumber(pNum);
-        this.setInsurance(insurance);
+        this.setInsuranceImpl(insuranceImpl);
         this.setPaymentCard(pCard);
     }
 
@@ -57,24 +57,24 @@ public class PatientImpl extends PersonImpl implements Patient {
     }
 
     /**
-     * gets insurance
+     * gets insuranceImpl
      *
-     * @return insurance
+     * @return insuranceImpl
      */
-    public Insurance getInsurance() {
-        return insurance;
+    public InsuranceImpl getInsuranceImpl() {
+        return insuranceImpl;
     }
 
     /**
-     * sets insurance
+     * sets insuranceImpl
      *
-     * @param insurance insurance
+     * @param insuranceImpl insuranceImpl
      */
-    public void setInsurance(Insurance insurance) {
-        if (insurance == null) {
-            throw new IllegalArgumentException("You must enter an insurance");
+    public void setInsuranceImpl(InsuranceImpl insuranceImpl) {
+        if (insuranceImpl == null) {
+            throw new IllegalArgumentException("You must enter an insuranceImpl");
         }
-        this.insurance = insurance;
+        this.insuranceImpl = insuranceImpl;
     }
 
     /**
@@ -100,6 +100,6 @@ public class PatientImpl extends PersonImpl implements Patient {
 
     @Override
     public String toString() {
-        return super.toString() + ", " + this.getPaymentCard() + ", " + this.getPhoneNumber() + ", " + this.getInsurance().toString();
+        return super.toString() + ", " + this.getPaymentCard() + ", " + this.getPhoneNumber() + ", " + this.getInsuranceImpl().toString();
     }
 }

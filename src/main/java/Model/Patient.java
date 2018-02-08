@@ -6,9 +6,9 @@ public interface Patient {
 
     public void setPhoneNumber(long phoneNumber);
 
-    public Insurance getInsurance();
+    public InsuranceImpl getInsuranceImpl();
 
-    public void setInsurance(Insurance insurance);
+    public void setInsuranceImpl(InsuranceImpl insuranceImpl);
 
     public String getPaymentCard();
 
