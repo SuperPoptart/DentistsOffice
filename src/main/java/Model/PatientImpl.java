@@ -37,6 +37,7 @@ public class PatientImpl extends PersonImpl {
 
     /**
      * gets phone number
+     *
      * @return phone number
      */
     public long getPhoneNumber() {
@@ -52,6 +53,7 @@ public class PatientImpl extends PersonImpl {
 
     /**
      * gets insurance
+     *
      * @return insurance
      */
     public Insurance getInsurance() {
@@ -65,14 +67,25 @@ public class PatientImpl extends PersonImpl {
         this.insurance = insurance;
     }
 
+    /**
+     * gets payment card
+     *
+     * @return payment card
+     */
     public String getPaymentCard() {
         return paymentCard;
     }
 
+    /**
+     * sets payment card
+     *
+     * @param paymentCard payment card
+     */
     public void setPaymentCard(String paymentCard) {
         if (paymentCard.length() < 24 || paymentCard.length() > 24) {
             throw new IllegalArgumentException("You must have a card length that is 24 digits long!");
         }
         this.paymentCard = paymentCard;
     }
+
 }

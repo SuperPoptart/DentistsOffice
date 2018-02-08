@@ -94,7 +94,7 @@ public class PersonImpl implements Person, Comparable {
 
     public boolean equals(Object o) {
         PersonImpl other = (PersonImpl) o;
-        if (other.getFirstName().equals(this.getFirstName()) && other.getLastName().equals(this.getLastName()) && other.getID() == this.getID()) {
+        if (other.getID() == this.getID()) {
             return true;
         } else return false;
     }
