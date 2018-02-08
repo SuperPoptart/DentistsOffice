@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * represents a patient
+ */
 public class PatientImpl extends PersonImpl {
 
     private String firstName;
@@ -9,9 +12,22 @@ public class PatientImpl extends PersonImpl {
     private Insurance insurance;
     private String paymentCard;
 
+    /**
+     * default constructor
+     */
     public PatientImpl() {
     }
 
+    /**
+     * overloaded constructor
+     *
+     * @param fName     first name
+     * @param lName     last name
+     * @param ID        ID
+     * @param pNum      phone number
+     * @param insurance insurance info
+     * @param pCard     payment card
+     */
     public PatientImpl(String fName, String lName, int ID, long pNum, Insurance insurance, String pCard) {
         super(fName, lName, ID);
         this.setPhoneNumber(pNum);
@@ -19,6 +35,10 @@ public class PatientImpl extends PersonImpl {
         this.setPaymentCard(pCard);
     }
 
+    /**
+     * gets phone number
+     * @return phone number
+     */
     public long getPhoneNumber() {
         return phoneNumber;
     }
