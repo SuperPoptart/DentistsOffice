@@ -3,7 +3,7 @@ package Model;
 /**
  * represents a provider
  */
-public class ProviderImpl extends PersonImpl {
+public class ProviderImpl extends PersonImpl implements Provider {
 
     private String firstName;
     private String lastName;
@@ -24,7 +24,7 @@ public class ProviderImpl extends PersonImpl {
      * @param title title
      * @param Id    ID
      */
-    public ProviderImpl(String fName, String lName, String title, int Id) {
+    public ProviderImpl(String fName, String lName, int Id, String title) {
         super(fName, lName, Id);
         this.setTitle(title);
     }
@@ -44,7 +44,7 @@ public class ProviderImpl extends PersonImpl {
      * @param title title
      */
     public void setTitle(String title) {
-        if (title.isEmpty() || title == null) {
+        if (title.isEmpty()) {
             throw new IllegalArgumentException("You need a title!");
         }
         this.title = title;
