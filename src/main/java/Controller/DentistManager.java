@@ -12,6 +12,7 @@ public class DentistManager {
     private TextUI textUI;
     private AppointmentList appointment;
     private UserList usersList;
+    private static UserImpl holder;
     private static final int EDIT_USERS = 1;
     private static final int EDIT_PROVIDERS = 2;
     private static final int EDIT_PATIENTS = 3;
@@ -27,32 +28,35 @@ public class DentistManager {
     }
 
     public void run() throws IOException {
-        boolean exitTime = true;
-
+        boolean exitTime;
         if (usersList.isEmpty()) {
             User user = UserFactory.getInstance("Administrator", "1234Password", true);
             this.usersList.add(user);
             this.saveUser();
         }
-        login();
+        exitTime = login();
 
-        while (!exitTime) {
-            int selection = textUI.showMenu(generateMenuOptions());
-            switch (selection) {
-                case EDIT_USERS:
-                    editUsers();
-                    break;
-                case EDIT_PROVIDERS:
-                    break;
-                case EDIT_PATIENTS:
-                    break;
-                case VIEW_APPOINTMENTS:
-                    break;
-                case EXIT:
-                    this.saveUser();
-                    exitTime = true;
-                default:
+        while (exitTime) {
+            if (holder.isAdmin()) {
+                int selection = textUI.showMenu(generateMenuOptions());
+                switch (selection) {
+                    case EDIT_USERS:
+                        editUsers();
+                        break;
+                    case EDIT_PROVIDERS:
+                        break;
+                    case EDIT_PATIENTS:
+                        break;
+                    case VIEW_APPOINTMENTS:
+                        break;
+                    case EXIT:
+                        this.saveUser();
+                        exitTime = false;
+                    default:
 
+                }
+            }else {
+                //fill with normal user menu
             }
         }
 
@@ -67,7 +71,14 @@ public class DentistManager {
         uname = textUI.readStringFromUser();
         textUI.display("Enter a Password");
         pword = textUI.readStringFromUser();
-return true;
+
+        for (int i = 0; i < usersList.size() ; i++){
+            if(usersList.get(i).getUsername().equals(uname) && usersList.get(i).getPassword().equals(pword)){
+                holder = (UserImpl) usersList.get(i);
+                return true;
+            }
+        }
+return false;
     }
 
     private void editUsers() throws IOException {

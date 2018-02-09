@@ -89,4 +89,8 @@ public class UserImpl implements User, Serializable{
         this.admin = admin;
     }
 
+    @Override
+    public String toString() {
+        return this.getUsername() + ", " + this.getPassword() + ", " + this.isAdmin();
+    }
 }
