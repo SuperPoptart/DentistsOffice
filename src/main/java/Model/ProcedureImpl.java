@@ -1,30 +1,34 @@
 package Model;
 
 /**
- *represents a procedure
+ * represents a procedure
  */
-public class ProcedureImpl implements Procedure{
+public class ProcedureImpl implements Procedure {
 
     private Patient patient;
     private Provider provider;
     private String code;
     private String description;
     private double amount;
+    private static final int MAX_CODE = 6;
+    private static final int LEAST_AMOUNT = 0;
 
     /**
      * default constructor
      */
-    public ProcedureImpl(){}
+    public ProcedureImpl() {
+    }
 
     /**
      * overloaded constructor
-     * @param patient patient
+     *
+     * @param patient  patient
      * @param provider provider
-     * @param code procedure code
-     * @param desc description
-     * @param amount amount
+     * @param code     procedure code
+     * @param desc     description
+     * @param amount   amount
      */
-    public ProcedureImpl(Patient patient, Provider provider, String code, String desc, double amount){
+    public ProcedureImpl(Patient patient, Provider provider, String code, String desc, double amount) {
         this.setPatient(patient);
         this.setProvider(provider);
         this.setCode(code);
@@ -34,6 +38,7 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * gets patient
+     *
      * @return patient
      */
     @Override
@@ -43,11 +48,12 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * sets patient
+     *
      * @param patient patient
      */
     @Override
     public void setPatient(Patient patient) {
-        if(patient == null){
+        if (patient == null) {
             throw new IllegalArgumentException("You need a patient");
         }
         this.patient = patient;
@@ -55,6 +61,7 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * gets provider
+     *
      * @return provider
      */
     @Override
@@ -64,11 +71,12 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * sets provider
+     *
      * @param provider provider
      */
     @Override
     public void setProvider(Provider provider) {
-        if(provider == null){
+        if (provider == null) {
             throw new IllegalArgumentException("You need a provider");
         }
         this.provider = provider;
@@ -76,6 +84,7 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * gets code
+     *
      * @return code
      */
     @Override
@@ -85,11 +94,12 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * sets code
+     *
      * @param code code
      */
     @Override
     public void setCode(String code) {
-        if(code == null || !code.contains("D") || code.length()!=6){
+        if (code == null || !code.contains("D") || code.length() != MAX_CODE) {
             throw new IllegalArgumentException("Code must be 6 characters long and start with D");
         }
         this.code = code;
@@ -97,6 +107,7 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * gets description
+     *
      * @return description
      */
     @Override
@@ -106,15 +117,20 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * sets description
+     *
      * @param description description
      */
     @Override
     public void setDescription(String description) {
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("You must add a description");
+        }
         this.description = description;
     }
 
     /**
      * gets amount
+     *
      * @return amount
      */
     @Override
@@ -124,10 +140,20 @@ public class ProcedureImpl implements Procedure{
 
     /**
      * sets amount
+     *
      * @param amount amount
      */
     @Override
     public void setAmount(double amount) {
+        if (amount <= LEAST_AMOUNT) {
+            throw new IllegalArgumentException("You have to add an amount");
+        }
         this.amount = amount;
     }
+
+    public String toString() {
+        return this.getPatient() + ", " + this.getProvider() + ", " + this.getAmount() + ", " + this.getCode() + ", " + this.getDescription();
+    }
+
+
 }
