@@ -92,4 +92,20 @@ public class Appointment {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return this.getTime().getTime() + ", " + this.printProcedures();
+    }
+
+    private String printProcedures() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0 ; i<procedures.size() ; i++){
+            sb.append(procedures.get(i).toString());
+            if (i < procedures.size()){
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
 }
