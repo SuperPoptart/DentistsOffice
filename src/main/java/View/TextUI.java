@@ -61,6 +61,17 @@ public class TextUI {
     }
 
     /**
+     * reads a string from user
+     *
+     * @return the string
+     * @throws IOException throws
+     */
+    public String readStringFromUser() throws IOException {
+        String rawString = in.readLine();
+        return rawString;
+    }
+
+    /**
      * prints a line
      *
      * @param s - what you want to print
@@ -68,4 +79,5 @@ public class TextUI {
     public void display(String s) {
         out.println(s);
     }
+
 }
