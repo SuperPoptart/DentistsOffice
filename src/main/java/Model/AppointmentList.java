@@ -5,5 +5,8 @@ import java.util.ArrayList;
 
 public class AppointmentList extends ArrayList<Appointment> implements Serializable {
 
+    public void test() {
+        System.out.println("please update");
+    }
     //sumAppointmentCosts?
 }
