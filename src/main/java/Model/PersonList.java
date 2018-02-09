@@ -8,6 +8,6 @@ public class PersonList extends ArrayList<Person> implements Serializable {
 
     public void test() {
         System.out.println("Please work");
-        
+
     }
 }
