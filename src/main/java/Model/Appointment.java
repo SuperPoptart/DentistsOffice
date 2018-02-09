@@ -14,7 +14,7 @@ public class Appointment {
     /**
      * default constructor
      */
-    Appointment() {
+    public Appointment() {
         this.procedures = new ArrayList<Procedure>();
     }
 
