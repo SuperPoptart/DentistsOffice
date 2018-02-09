@@ -6,7 +6,7 @@ import java.util.Calendar;
 /**
  * represents an appointment
  */
-public class Appointment {
+public class Appointment implements Comparable<Appointment> {
 
     private Calendar time;
     private ArrayList<Procedure> procedures;
@@ -91,5 +91,10 @@ public class Appointment {
                 procedures.remove(i);
             }
         }
+    }
+
+    @Override
+    public int compareTo(Appointment o) {
+        return (int) (this.getTime().getTimeInMillis() - o.getTime().getTimeInMillis());
     }
 }

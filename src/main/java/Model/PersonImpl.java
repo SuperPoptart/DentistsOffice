@@ -3,7 +3,7 @@ package Model;
 /**
  * represents a person
  */
-public class PersonImpl implements Person, Comparable {
+public class PersonImpl implements Person, Comparable<Person> {
 
     private String firstName;
     private String lastName;
@@ -100,13 +100,12 @@ public class PersonImpl implements Person, Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        PersonImpl other = (PersonImpl) o;
-        return other.getID() - this.getID();
+    public String toString() {
+        return this.getFirstName() + ", " + this.getLastName() + ", " + this.getID();
     }
 
     @Override
-    public String toString() {
-        return this.getFirstName() + ", " + this.getLastName() + ", " + this.getID();
+    public int compareTo(Person o) {
+        return this.getID() - o.getID();
     }
 }
