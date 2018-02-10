@@ -150,7 +150,17 @@ public class DentistManager {
         return readForUsername();
     }
 
-    private void editUser() {
+    private void editUser() throws IOException {
+        String hold;
+        textUI.display("Enter the users name you'd like to change:");
+        hold = readForUsername();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getUsername().equals(hold)) {
+                usersList.remove(i);
+                addUser();
+            }
+        }
+
     }
 
     private void addUser() throws IOException {
