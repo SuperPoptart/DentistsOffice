@@ -13,4 +13,8 @@ public interface Patient {
     public String getPaymentCard();
 
     public void setPaymentCard(String paymentCard);
+
+    public int getId();
+
+    public void setId(int id);
 }

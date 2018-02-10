@@ -132,6 +132,18 @@ public class DentistManager {
         return holdin;
     }
 
+    private int readIdforPatient() throws IOException {
+        int holdin;
+        holdin = textUI.readIntFromUser();
+        for (int i = 0; i < patientList.size(); i++) {
+            if (holdin == patientList.get(i).getId()) {
+                textUI.display("That username is taken try a different one");
+                holdin = textUI.readIntFromUser();
+            }
+        }
+        return holdin;
+    }
+
     private void removeProvider() {
     }
 

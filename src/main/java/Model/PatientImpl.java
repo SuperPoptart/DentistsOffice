@@ -21,12 +21,12 @@ public class PatientImpl extends PersonImpl implements Patient {
     /**
      * overloaded constructor
      *
-     * @param fName     first name
-     * @param lName     last name
-     * @param ID        ID
-     * @param pNum      phone number
+     * @param fName         first name
+     * @param lName         last name
+     * @param ID            ID
+     * @param pNum          phone number
      * @param insuranceImpl insuranceImpl info
-     * @param pCard     payment card
+     * @param pCard         payment card
      */
     public PatientImpl(String fName, String lName, int ID, long pNum, InsuranceImpl insuranceImpl, String pCard) {
         super(fName, lName, ID);
@@ -96,6 +96,29 @@ public class PatientImpl extends PersonImpl implements Patient {
             throw new IllegalArgumentException("You must have a card length that is 24 digits long!");
         }
         this.paymentCard = paymentCard;
+    }
+
+    /**
+     * gets id
+     *
+     * @return id
+     */
+    @Override
+    public int getId() {
+        return this.ID;
+    }
+
+    /**
+     * sets id
+     *
+     * @param id id
+     */
+    @Override
+    public void setId(int id) {
+        if (id == 0) {
+            throw new IllegalArgumentException("Need to enter an ID");
+        }
+        this.ID = id;
     }
 
     @Override

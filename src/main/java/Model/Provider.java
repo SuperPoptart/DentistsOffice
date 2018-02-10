@@ -6,5 +6,7 @@ public interface Provider {
 
     public void setTitle(String title);
 
-    int getId();
+    public int getId();
+
+    public void setId(int id);
 }
