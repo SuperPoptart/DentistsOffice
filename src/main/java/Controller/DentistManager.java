@@ -28,12 +28,16 @@ public class DentistManager {
     }
 
     public void run() throws IOException {
-        boolean exitTime;
+        boolean exitTime = false;
 
         checkEmpty();
 
-        exitTime = login();
-
+        while (!exitTime) {
+            exitTime = login();
+            if (!exitTime) {
+                textUI.display("Please enter a valid login!\n");
+            }
+        }
         while (exitTime) {
             if (holder.isAdmin()) {
                 int selection = textUI.showMenu(generateMenuOptions());
