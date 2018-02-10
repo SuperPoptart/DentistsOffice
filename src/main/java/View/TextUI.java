@@ -81,6 +81,11 @@ public class TextUI {
         out.println(s);
     }
 
+    /**
+     * reads a boolean from user using numbers
+     * @return a boolean
+     * @throws IOException throws
+     */
     public boolean readBooleanFromUser() throws IOException {
         Set<Integer> valid = new HashSet<>();
         valid.add(0);
@@ -90,6 +95,17 @@ public class TextUI {
         holdin = readIntFromUser(valid);
         if (holdin == 0) {
             return true;
-        }else return false;
+        } else return false;
+    }
+
+    /**
+     * reads an int from user
+     * @return the int
+     * @throws IOException throws
+     */
+    public int readIntFromUser() throws IOException {
+        int rawInt;
+        rawInt = Integer.parseInt(in.readLine());
+        return rawInt;
     }
 }

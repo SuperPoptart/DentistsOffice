@@ -50,6 +50,27 @@ public class ProviderImpl extends PersonImpl implements Provider {
         this.title = title;
     }
 
+    /**
+     * gets id
+     *
+     * @return id
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
+     * sets ID
+     *
+     * @param id id
+     */
+    public void setId(int id) {
+        if (id == 0) {
+            throw new IllegalArgumentException("You must enter an id");
+        }
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return super.toString() + ", " + this.getTitle();
