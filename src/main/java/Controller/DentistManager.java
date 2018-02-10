@@ -12,6 +12,7 @@ public class DentistManager {
     private TextUI textUI;
     private AppointmentList appointment;
     private UserList usersList;
+    private ProviderList providerList;
     private static UserImpl holder;
     private static final int EDIT_USERS = 1;
     private static final int EDIT_PROVIDERS = 2;
@@ -46,10 +47,13 @@ public class DentistManager {
                         editUsers();
                         break;
                     case EDIT_PROVIDERS:
+                        editProviders();
                         break;
                     case EDIT_PATIENTS:
+                        //richie will do
                         break;
                     case VIEW_APPOINTMENTS:
+                        //dalton should try
                         break;
                     case EXIT:
                         this.saveUser();
@@ -58,10 +62,45 @@ public class DentistManager {
 
                 }
             } else {
-                //fill with normal user menu
+                //fill with normal user menu also richie
             }
         }
 
+    }
+
+    private void editProviders() throws IOException {
+        final int ADD = 1, EDIT = 2, REMOVE = 3, QUIT = 4;
+
+        Map<Integer, String> userMenu = new HashMap<>();
+        userMenu.put(ADD, "Add User");
+        userMenu.put(EDIT, "Edit User");
+        userMenu.put(REMOVE, "Remove User");
+        userMenu.put(QUIT, "Go Back");
+
+        int selection = this.textUI.showMenu(userMenu);
+        switch (selection) {
+            case (ADD):
+                addProvider();
+                break;
+            case (EDIT):
+                editProvider();
+                break;
+            case (REMOVE):
+                removeProvider();
+                break;
+            case (QUIT):
+                break;
+            default:
+                throw new IllegalArgumentException("Did not expect: " + selection);
+        }
+    }
+    private void editProvider() {
+    }
+
+    private void addProvider() {
+    }
+
+    private void removeProvider() {
     }
 
     private void checkEmpty() throws IOException {
@@ -190,9 +229,27 @@ public class DentistManager {
     }
 
 
-    private static final String filename = "dentistinfo.sav";
+    private static final String apfilename = "appointmentinfo.sav";
     private static final String userFilename = "users.sav";
+    private static final String profilename = "providers.sav";
+    private static final String patfilename = "patients.sav";
 
+
+    private void saveProvider() throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(profilename))) {
+            out.writeObject(this.providerList);
+        }
+    }
+
+    private void loadProvider() throws IOException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(profilename))) {
+            try {
+                this.providerList = (ProviderList) in.readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void saveUser() throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(userFilename))) {
             out.writeObject(this.usersList);
