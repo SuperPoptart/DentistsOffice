@@ -4,6 +4,7 @@ import Model.*;
 import View.TextUI;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,8 @@ public class DentistManager {
         usersList = new UserList();
         textUI = new TextUI();
         this.loadUser();
-//        this.loadInfo();
+//        this.loadPatient();
+//        this.loadProvider();
     }
 
     public void run() throws IOException {
@@ -58,6 +60,8 @@ public class DentistManager {
                         break;
                     case EXIT:
                         this.saveUser();
+                        this.savePatient();
+                        this.saveProvider();
                         exitTime = false;
                     default:
 
@@ -73,9 +77,9 @@ public class DentistManager {
         final int ADD = 1, EDIT = 2, REMOVE = 3, QUIT = 4;
 
         Map<Integer, String> userMenu = new HashMap<>();
-        userMenu.put(ADD, "Add User");
-        userMenu.put(EDIT, "Edit User");
-        userMenu.put(REMOVE, "Remove User");
+        userMenu.put(ADD, "Add Provider");
+        userMenu.put(EDIT, "Edit Provider");
+        userMenu.put(REMOVE, "Remove Provider");
         userMenu.put(QUIT, "Go Back");
 
         int selection = this.textUI.showMenu(userMenu);
@@ -99,7 +103,33 @@ public class DentistManager {
     private void editProvider() {
     }
 
-    private void addProvider() {
+    private void addProvider() throws IOException {
+        String fName;
+        String lName;
+        String title;
+        int id;
+        textUI.display("Enter their First Name");
+        fName = textUI.readStringFromUser();
+        textUI.display("Enter their Last Name");
+        lName = textUI.readStringFromUser();
+        textUI.display("Enter their Title");
+        title = textUI.readStringFromUser();
+        textUI.display("Enter their ID");
+        id = readIdforProvider();
+        Provider provider = new ProviderImpl(fName, lName, id, title);
+        providerList.add(provider);
+    }
+
+    private int readIdforProvider() throws IOException {
+        int holdin;
+        holdin = textUI.readIntFromUser();
+        for (int i = 0; i < providerList.size(); i++) {
+            if (holdin == providerList.get(i).getId()) {
+                textUI.display("That username is taken try a different one");
+                holdin = textUI.readIntFromUser();
+            }
+        }
+        return holdin;
     }
 
     private void removeProvider() {
