@@ -3,6 +3,7 @@ package Controller;
 import Model.*;
 import View.TextUI;
 
+import javax.naming.directory.SearchControls;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +57,7 @@ public class DentistManager {
                         //richie will do
                         break;
                     case VIEW_APPOINTMENTS:
-                        //dalton should try
+                        appointmentView();
                         break;
                     case EXIT:
                         this.saveUser();
@@ -71,6 +72,51 @@ public class DentistManager {
             }
         }
 
+    }
+
+    private void appointmentView() throws IOException {
+        final int ADD = 1, EDIT = 2, REMOVE = 3, SEARCH = 4, QUIT = 5;
+
+        Map<Integer, String> appMenu = new HashMap<>();
+        appMenu.put(ADD, "Add Appointment");
+        appMenu.put(EDIT, "Edit Appointment");
+        appMenu.put(REMOVE, "Remove Appointment");
+        appMenu.put(SEARCH, "Search Appointments");
+        appMenu.put(QUIT, "Go Back");
+
+        int selection = this.textUI.showMenu(appMenu);
+        switch (selection) {
+            case (ADD):
+                addAppointment();
+                break;
+            case(EDIT):
+                editAppointment();
+                break;
+            case (REMOVE):
+                removeAppointment();
+                break;
+            case (SEARCH):
+                searchAppointment();
+                break;
+            default:
+                textUI.display("Please enter a valid menu option. " + selection + " is not a valid option.");
+        }
+    }
+
+    private void searchAppointment() {
+        //shitfestinc
+    }
+
+    private void removeAppointment() {
+        //remove the specified appointment
+    }
+
+    private void editAppointment() {
+        //edit a specified appointment
+    }
+
+    private void addAppointment() {
+        //add a new appointment
     }
 
     private void editProviders() throws IOException {
@@ -277,6 +323,22 @@ public class DentistManager {
     private static final String userFilename = "users.sav";
     private static final String profilename = "providers.sav";
     private static final String patfilename = "patients.sav";
+
+    private void saveAppointment() throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(apfilename))) {
+            out.writeObject(this.appointment);
+        }
+    }
+
+    private void loadAppointment() throws IOException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(apfilename))) {
+            try {
+                this.appointment = (AppointmentList) in.readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void savePatient() throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(patfilename))) {
