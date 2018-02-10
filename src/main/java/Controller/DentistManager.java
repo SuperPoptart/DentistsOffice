@@ -12,6 +12,7 @@ public class DentistManager {
     private TextUI textUI;
     private AppointmentList appointment;
     private UserList usersList;
+    private PatientList patientList;
     private ProviderList providerList;
     private static UserImpl holder;
     private static final int EDIT_USERS = 1;
@@ -94,6 +95,7 @@ public class DentistManager {
                 throw new IllegalArgumentException("Did not expect: " + selection);
         }
     }
+
     private void editProvider() {
     }
 
@@ -234,6 +236,21 @@ public class DentistManager {
     private static final String profilename = "providers.sav";
     private static final String patfilename = "patients.sav";
 
+    private void savePatient() throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(patfilename))) {
+            out.writeObject(this.patientList);
+        }
+    }
+
+    private void loadPatient() throws IOException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(patfilename))) {
+            try {
+                this.patientList = (PatientList) in.readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void saveProvider() throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(profilename))) {
@@ -250,6 +267,7 @@ public class DentistManager {
             }
         }
     }
+
     private void saveUser() throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(userFilename))) {
             out.writeObject(this.usersList);
