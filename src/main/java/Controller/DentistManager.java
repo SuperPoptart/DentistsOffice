@@ -12,6 +12,7 @@ public class DentistManager {
     private TextUI textUI;
     private AppointmentList appointment;
     private UserList usersList;
+    private static UserImpl holder;
     private static final int EDIT_USERS = 1;
     private static final int EDIT_PROVIDERS = 2;
     private static final int EDIT_PATIENTS = 3;
@@ -27,35 +28,55 @@ public class DentistManager {
     }
 
     public void run() throws IOException {
-        boolean exitTime = true;
+        boolean exitTime = false;
 
+        checkEmpty();
+
+        while (!exitTime) {
+            exitTime = login();
+            if (!exitTime) {
+                textUI.display("Please enter a valid login!\n");
+            }
+        }
+        while (exitTime) {
+            if (holder.isAdmin()) {
+                int selection = textUI.showMenu(generateMenuOptions());
+                switch (selection) {
+                    case EDIT_USERS:
+                        editUsers();
+                        break;
+                    case EDIT_PROVIDERS:
+                        break;
+                    case EDIT_PATIENTS:
+                        break;
+                    case VIEW_APPOINTMENTS:
+                        break;
+                    case EXIT:
+                        this.saveUser();
+                        exitTime = false;
+                    default:
+
+                }
+            } else {
+                //fill with normal user menu
+            }
+        }
+
+    }
+
+    private void checkEmpty() throws IOException {
         if (usersList.isEmpty()) {
             User user = UserFactory.getInstance("Administrator", "1234Password", true);
             this.usersList.add(user);
             this.saveUser();
-        }
-        login();
-
-        while (!exitTime) {
-            int selection = textUI.showMenu(generateMenuOptions());
-            switch (selection) {
-                case EDIT_USERS:
-                    editUsers();
-                    break;
-                case EDIT_PROVIDERS:
-                    break;
-                case EDIT_PATIENTS:
-                    break;
-                case VIEW_APPOINTMENTS:
-                    break;
-                case EXIT:
-                    this.saveUser();
-                    exitTime = true;
-                default:
-
+            if (login()) {
+                String holding;
+                textUI.display("Hello admin, choose a password!");
+                holding = textUI.readStringFromUser();
+                usersList.get(0).setPassword(holding);
+                this.saveUser();
             }
         }
-
     }
 
     private boolean login() throws IOException {
@@ -64,10 +85,17 @@ public class DentistManager {
         String pword;
 
         textUI.display("Enter a Username");
-        uname = textUI.readStringFromUser();
+        uname = textUI.readStringFromUser().trim();
         textUI.display("Enter a Password");
-        pword = textUI.readStringFromUser();
-return true;
+        pword = textUI.readStringFromUser().trim();
+
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getUsername().equals(uname) && usersList.get(i).getPassword().equals(pword)) {
+                holder = (UserImpl) usersList.get(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void editUsers() throws IOException {
@@ -88,7 +116,7 @@ return true;
                 editUser();
                 break;
             case (REMOVE):
-                removerUser();
+                removeUser();
                 break;
             case (QUIT):
                 break;
@@ -97,18 +125,68 @@ return true;
         }
     }
 
-    private void removerUser() {
+    private void removeUser() throws IOException {
+        String hold;
+        textUI.display("Enter the users name you'd like to delete:");
+        hold = readForUsername();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getUsername().equals(hold)) {
+                usersList.remove(i);
+            }
+        }
+
     }
 
-    private void editUser() {
+    private String readForUsername() throws IOException {
+        String holdin;
+
+        holdin = textUI.readStringFromUser().trim();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (holdin.equals(usersList.get(i).getUsername())) {
+                return holdin;
+            }
+        }
+        textUI.display("There is no-one by that name, try again");
+        return readForUsername();
     }
 
-    private void addUser() {
-//        String hold1;
-//        String hold2;
-//        boolean hold3;
-//        textUI.display("Enter a User Name");
-//        hold1 = text
+    private void editUser() throws IOException {
+        String hold;
+        textUI.display("Enter the users name you'd like to change:");
+        hold = readForUsername();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getUsername().equals(hold)) {
+                usersList.remove(i);
+                addUser();
+            }
+        }
+
+    }
+
+    private void addUser() throws IOException {
+        String hold1;
+        String hold2;
+        boolean hold3;
+        textUI.display("Enter a User Name");
+        hold1 = readUserName();
+        textUI.display("Enter a Password");
+        hold2 = textUI.readStringFromUser();
+        textUI.display("Is the user an admin? (0 = true : 1 = false)");
+        hold3 = textUI.readBooleanFromUser();
+        User user = new UserImpl(hold1, hold2, hold3);
+        usersList.add(user);
+    }
+
+    private String readUserName() throws IOException {
+        String holdin;
+        holdin = textUI.readStringFromUser().trim();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (holdin.equals(usersList.get(i).getUsername())) {
+                textUI.display("That username is taken try a different one");
+                holdin = textUI.readStringFromUser();
+            }
+        }
+        return holdin;
     }
 
 
