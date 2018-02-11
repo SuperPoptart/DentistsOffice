@@ -2,9 +2,6 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
-import sun.text.normalizer.NormalizerBase;
-
-import javax.naming.directory.SearchControls;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +29,7 @@ public class DentistManager {
         this.loadUser();
 //        this.loadPatient();
 //        this.loadProvider();
+//        this.loadAppointment();
     }
 
     public void run() throws IOException {
@@ -65,6 +63,7 @@ public class DentistManager {
                         this.saveUser();
                         this.savePatient();
                         this.saveProvider();
+                        this.saveAppointment();
                         exitTime = false;
                     default:
 
