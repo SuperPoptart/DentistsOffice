@@ -2,10 +2,12 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
+import sun.text.normalizer.NormalizerBase;
 
 import javax.naming.directory.SearchControls;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -103,8 +105,84 @@ public class DentistManager {
         }
     }
 
-    private void searchAppointment() {
-        //shitfestinc
+    private void searchAppointment() throws IOException {
+        final int TIME = 1, PROVIDER = 2, PATIENT = 3, PROCEDURE = 4, QUIT = 5;
+
+        Map<Integer, String> searchMenu = new HashMap<>();
+        searchMenu.put(TIME, "By Time");
+        searchMenu.put(PROVIDER, "By Provider");
+        searchMenu.put(PATIENT, "By Patient");
+        searchMenu.put(PROCEDURE, "By Procedure");
+        searchMenu.put(QUIT, "Go Back");
+
+        int selection = this.textUI.showMenu(searchMenu);
+        switch(selection) {
+            case (TIME):
+                appTimeSearch();
+                break;
+            case(PROVIDER):
+//                appProviderSearch();
+                break;
+            case(PATIENT):
+//                appPatientSearch();
+                break;
+            case(PROCEDURE):
+//                appProcedureSearch();
+                break;
+            case(QUIT):
+                break;
+            default:
+                this.textUI.display(selection + " is not valid selection.");
+        }
+    }
+
+    private void appTimeSearch() throws IOException {
+        Calendar max = makeMaxTime();
+        Calendar min = makeMinTime();
+
+        for(int i = 0; i < appointment.size(); i++){
+            if(appointment.get(i).getTime().getTimeInMillis() < max.getTimeInMillis() && appointment.get(i).getTime().getTimeInMillis() > min.getTimeInMillis()){
+                this.textUI.display(appointment.get(i).toString());
+            }
+        }
+
+    }
+
+    private Calendar makeMinTime() throws IOException {
+        Calendar min = makeMinTime();
+        this.textUI.display("What is the earliest year you wish to see? (IE 00)");
+        int minYear = this.textUI.readIntFromUser();
+        this.textUI.display("What is the earliest month in this year you wish to see?(IE 00)");
+        int minMonth = this.textUI.readIntFromUser();
+        this.textUI.display("What is the earliest day of the month you wish to see? (IE 00)");
+        int minDay = this.textUI.readIntFromUser();
+        this.textUI.display("What is the earliest hour in this day you wish to see? (IE 00)");
+        int minHour = this.textUI.readIntFromUser();
+        this.textUI.display("What is the earliest minute in this hour you with to see?");
+        int minMin = this.textUI.readIntFromUser();
+
+        min.set(minYear, minMonth, minDay, minHour, minMin);
+
+        return min;
+    }
+
+    private Calendar makeMaxTime() throws IOException {
+        Calendar max = Calendar.getInstance();
+
+        this.textUI.display("What is the latest year you wish to see? (IE 00)");
+        int maxYear = this.textUI.readIntFromUser();
+        this.textUI.display("What is the latest month in this year you wish to see?(IE 00)");
+        int maxMonth = this.textUI.readIntFromUser();
+        this.textUI.display("What is the latest day of the month you wish to see? (IE 00)");
+        int maxDay = this.textUI.readIntFromUser();
+        this.textUI.display("What is the latest hour in this day you wish to see? (IE 00)");
+        int maxHour = this.textUI.readIntFromUser();
+        this.textUI.display("What is the latest minute in this hour you with to see?");
+        int maxMin = this.textUI.readIntFromUser();
+
+        max.set(maxYear, maxMonth, maxDay, maxHour, maxMin);
+
+        return max;
     }
 
     private void removeAppointment() {
