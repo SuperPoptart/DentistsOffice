@@ -123,7 +123,7 @@ public class DentistManager {
                 appProviderSearch();
                 break;
             case (PATIENT):
-//                appPatientSearch();
+                appPatientSearch();
                 break;
             case (PROCEDURE):
 //                appProcedureSearch();
@@ -132,6 +132,19 @@ public class DentistManager {
                 break;
             default:
                 this.textUI.display(selection + " is not valid selection.");
+        }
+    }
+
+    private void appPatientSearch() throws IOException {
+        this.textUI.display("What is the ID number of the Patient you with to see?");
+        int lookUp = this.textUI.readIntFromUser();
+
+        for (int i = 0; i < appointment.size(); i++) {
+            for (int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
+                if (appointment.get(i).getProcedures().get(j).getPatient().getId() == lookUp) {
+                    this.textUI.display(appointment.get(i).toString());
+                }
+            }
         }
     }
 
