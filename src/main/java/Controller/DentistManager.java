@@ -91,13 +91,13 @@ public class DentistManager {
         int selection = this.textUI.showMenu(appMenu);
         switch (selection) {
             case (ADD):
-                addAppointment();
+//                addAppointment();
                 break;
             case (EDIT):
-                editAppointment();
+//                editAppointment();
                 break;
             case (REMOVE):
-                removeAppointment();
+//                removeAppointment();
                 break;
             case (SEARCH):
                 searchAppointment();
