@@ -291,7 +291,16 @@ public class DentistManager {
         return holdin;
     }
 
-    private void removeProvider() {
+    private void removeProvider() throws IOException {
+        int hold;
+        textUI.display("Enter the providers id you'd like to delete:");
+        hold = readIdforProvider();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (providerList.get(i).getId() == hold) {
+                providerList.remove(i);
+            }
+        }
+
     }
 
     private void checkEmpty() throws IOException {
