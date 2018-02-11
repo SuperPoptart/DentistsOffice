@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -280,15 +281,21 @@ public class DentistManager {
     }
 
     private int readIdforProvider() throws IOException {
-        int holdin;
-        holdin = textUI.readIntFromUser();
-        for (int i = 0; i < providerList.size(); i++) {
-            if (holdin == providerList.get(i).getId()) {
-                textUI.display("That username is taken try a different one");
-                holdin = textUI.readIntFromUser();
+        if (providerList.isEmpty()) {
+            int holders;
+            holders = textUI.readIntFromUser();
+            return holders;
+        } else {
+            int holdin;
+            holdin = textUI.readIntFromUser();
+            for (int i = 0; i < providerList.size(); i++) {
+                if (holdin == providerList.get(i).getId()) {
+                    textUI.display("That username is taken try a different one");
+                    holdin = textUI.readIntFromUser();
+                }
             }
+            return holdin;
         }
-        return holdin;
     }
 
     private int readIdforPatient() throws IOException {
