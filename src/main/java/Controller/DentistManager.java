@@ -2,9 +2,6 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
-import sun.text.normalizer.NormalizerBase;
-
-import javax.naming.directory.SearchControls;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +29,7 @@ public class DentistManager {
         this.loadUser();
 //        this.loadPatient();
 //        this.loadProvider();
+//        this.loadAppointment();
     }
 
     public void run() throws IOException {
@@ -65,6 +63,7 @@ public class DentistManager {
                         this.saveUser();
                         this.savePatient();
                         this.saveProvider();
+                        this.saveAppointment();
                         exitTime = false;
                     default:
 
@@ -91,7 +90,7 @@ public class DentistManager {
             case (ADD):
                 addAppointment();
                 break;
-            case(EDIT):
+            case (EDIT):
                 editAppointment();
                 break;
             case (REMOVE):
@@ -116,48 +115,33 @@ public class DentistManager {
         searchMenu.put(QUIT, "Go Back");
 
         int selection = this.textUI.showMenu(searchMenu);
-        switch(selection) {
+        switch (selection) {
             case (TIME):
                 appTimeSearch();
                 break;
-            case(PROVIDER):
+            case (PROVIDER):
                 appProviderSearch();
                 break;
-            case(PATIENT):
-                appPatientSearch();
+            case (PATIENT):
+//                appPatientSearch();
                 break;
-            case(PROCEDURE):
+            case (PROCEDURE):
 //                appProcedureSearch();
                 break;
-            case(QUIT):
+            case (QUIT):
                 break;
             default:
                 this.textUI.display(selection + " is not valid selection.");
         }
     }
 
-    private void appPatientSearch() throws IOException {
-        this.textUI.display("What is the ID number of the Patient you wish to see?");
-        int lookUp = this.textUI.readIntFromUser();
-
-        for(int i = 0; i < appointment.size(); i++) {
-            for(int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
-                if(appointment.get(i).getProcedures().get(j).getPatient().getId() == lookUp) {
-                    this.textUI.display(appointment.get(i).toString());
-                }
-            }
-        }
-
-
-    }
-
     private void appProviderSearch() throws IOException {
         this.textUI.display("What is the ID number of the Provider you with to see?");
         int lookUp = this.textUI.readIntFromUser();
 
-        for(int i = 0; i < appointment.size(); i++) {
-            for(int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
-                if(appointment.get(i).getProcedures().get(j).getProvider().getId() == lookUp) {
+        for (int i = 0; i < appointment.size(); i++) {
+            for (int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
+                if (appointment.get(i).getProcedures().get(j).getProvider().getId() == lookUp) {
                     this.textUI.display(appointment.get(i).toString());
                 }
             }
@@ -169,8 +153,8 @@ public class DentistManager {
         Calendar max = makeMaxTime();
         Calendar min = makeMinTime();
 
-        for(int i = 0; i < appointment.size(); i++){
-            if(appointment.get(i).getTime().getTimeInMillis() < max.getTimeInMillis() && appointment.get(i).getTime().getTimeInMillis() > min.getTimeInMillis()){
+        for (int i = 0; i < appointment.size(); i++) {
+            if (appointment.get(i).getTime().getTimeInMillis() < max.getTimeInMillis() && appointment.get(i).getTime().getTimeInMillis() > min.getTimeInMillis()) {
                 this.textUI.display(appointment.get(i).toString());
             }
         }
@@ -253,7 +237,16 @@ public class DentistManager {
         }
     }
 
-    private void editProvider() {
+    private void editProvider() throws IOException {
+        int hold;
+        textUI.display("Enter the providers id you'd like to change:");
+        hold = readIdforProvider();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (providerList.get(i).getId() == hold) {
+                providerList.remove(i);
+                addProvider();
+            }
+        }
     }
 
     private void addProvider() throws IOException {
@@ -297,7 +290,16 @@ public class DentistManager {
         return holdin;
     }
 
-    private void removeProvider() {
+    private void removeProvider() throws IOException {
+        int hold;
+        textUI.display("Enter the providers id you'd like to delete:");
+        hold = readIdforProvider();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (providerList.get(i).getId() == hold) {
+                providerList.remove(i);
+            }
+        }
+
     }
 
     private void checkEmpty() throws IOException {
