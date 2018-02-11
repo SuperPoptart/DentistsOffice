@@ -91,7 +91,7 @@ public class DentistManager {
             case (ADD):
                 addAppointment();
                 break;
-            case(EDIT):
+            case (EDIT):
                 editAppointment();
                 break;
             case (REMOVE):
@@ -116,20 +116,20 @@ public class DentistManager {
         searchMenu.put(QUIT, "Go Back");
 
         int selection = this.textUI.showMenu(searchMenu);
-        switch(selection) {
+        switch (selection) {
             case (TIME):
                 appTimeSearch();
                 break;
-            case(PROVIDER):
+            case (PROVIDER):
 //                appProviderSearch();
                 break;
-            case(PATIENT):
+            case (PATIENT):
 //                appPatientSearch();
                 break;
-            case(PROCEDURE):
+            case (PROCEDURE):
 //                appProcedureSearch();
                 break;
-            case(QUIT):
+            case (QUIT):
                 break;
             default:
                 this.textUI.display(selection + " is not valid selection.");
@@ -140,8 +140,8 @@ public class DentistManager {
         Calendar max = makeMaxTime();
         Calendar min = makeMinTime();
 
-        for(int i = 0; i < appointment.size(); i++){
-            if(appointment.get(i).getTime().getTimeInMillis() < max.getTimeInMillis() && appointment.get(i).getTime().getTimeInMillis() > min.getTimeInMillis()){
+        for (int i = 0; i < appointment.size(); i++) {
+            if (appointment.get(i).getTime().getTimeInMillis() < max.getTimeInMillis() && appointment.get(i).getTime().getTimeInMillis() > min.getTimeInMillis()) {
                 this.textUI.display(appointment.get(i).toString());
             }
         }
@@ -224,7 +224,17 @@ public class DentistManager {
         }
     }
 
-    private void editProvider() {
+    private void editProvider() throws IOException {
+        int hold;
+        textUI.display("Enter the provider's id number you'd like to change:");
+        hold = readIdforProvider();
+        for (int i = 0; i < usersList.size(); i++) {
+            if (providerList.get(i).getId() == hold) {
+                providerList.remove(i);
+                addProvider();
+            }
+        }
+
     }
 
     private void addProvider() throws IOException {
