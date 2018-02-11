@@ -292,7 +292,7 @@ public class DentistManager {
             holdin = textUI.readIntFromUser();
             for (int i = 0; i < providerList.size(); i++) {
                 if (holdin == providerList.get(i).getId()) {
-                    textUI.display("That username is taken try a different one");
+                    textUI.display("That id is taken try a different one");
                     holdin = textUI.readIntFromUser();
                 }
             }
@@ -310,7 +310,7 @@ public class DentistManager {
             holdin = textUI.readIntFromUser();
             for (int i = 0; i < patientList.size(); i++) {
                 if (holdin == patientList.get(i).getId()) {
-                    textUI.display("That username is taken try a different one");
+                    textUI.display("That id is taken try a different one");
                     holdin = textUI.readIntFromUser();
                 }
             }

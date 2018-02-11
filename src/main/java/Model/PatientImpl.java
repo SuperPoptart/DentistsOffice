@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * represents a patient
  */
-public class PatientImpl extends PersonImpl implements Patient {
+public class PatientImpl extends PersonImpl implements Patient, Serializable {
 
     private String firstName;
     private String lastName;
