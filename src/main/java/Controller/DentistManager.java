@@ -129,12 +129,24 @@ public class DentistManager {
                 appPatientSearch();
                 break;
             case (PROCEDURE):
-//                appProcedureSearch();
+                appProcedureSearch();
                 break;
             case (QUIT):
                 break;
             default:
                 this.textUI.display(selection + " is not valid selection.");
+        }
+    }
+
+    private void appProcedureSearch() throws IOException {
+        this.textUI.display("What is the Procedure code you wish to see?");
+        String lookUp = this.textUI.readStringFromUser();
+        for(int i = 0; i < appointment.size(); i++) {
+            for(int j = 0; i < appointment.get(i).getProcedures().size(); j++) {
+                if(appointment.get(i).getProcedures().get(j).getCode().equalsIgnoreCase(lookUp)) {
+                    this.textUI.display(appointment.get(i).toString());
+                }
+            }
         }
     }
 
