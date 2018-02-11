@@ -26,6 +26,8 @@ public class DentistManager {
     public DentistManager() throws IOException {
         appointment = new AppointmentList();
         usersList = new UserList();
+        providerList = new ProviderList();
+        patientList = new PatientList();
         textUI = new TextUI();
         this.loadUser();
 //        this.loadPatient();
@@ -286,15 +288,21 @@ public class DentistManager {
     }
 
     private int readIdforPatient() throws IOException {
-        int holdin;
-        holdin = textUI.readIntFromUser();
-        for (int i = 0; i < patientList.size(); i++) {
-            if (holdin == patientList.get(i).getId()) {
-                textUI.display("That username is taken try a different one");
-                holdin = textUI.readIntFromUser();
+        if (patientList.isEmpty()) {
+            int holders;
+            holders = textUI.readIntFromUser();
+            return holders;
+        } else {
+            int holdin;
+            holdin = textUI.readIntFromUser();
+            for (int i = 0; i < patientList.size(); i++) {
+                if (holdin == patientList.get(i).getId()) {
+                    textUI.display("That username is taken try a different one");
+                    holdin = textUI.readIntFromUser();
+                }
             }
+            return holdin;
         }
-        return holdin;
     }
 
     private void removeProvider() throws IOException {
