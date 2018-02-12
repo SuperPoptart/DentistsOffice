@@ -83,6 +83,7 @@ public class TextUI {
 
     /**
      * reads a boolean from user using numbers
+     *
      * @return a boolean
      * @throws IOException throws
      */
@@ -100,6 +101,7 @@ public class TextUI {
 
     /**
      * reads an int from user
+     *
      * @return the int
      * @throws IOException throws
      */
@@ -111,6 +113,7 @@ public class TextUI {
 
     /**
      * reads a double from user
+     *
      * @return the double
      * @throws IOException throws
      */
@@ -118,5 +121,26 @@ public class TextUI {
         double rawDouble;
         rawDouble = Double.parseDouble(in.readLine());
         return rawDouble;
+    }
+
+    /**
+     * reads long from user
+     *
+     * @return long if correct
+     * @throws IOException throws
+     */
+    public long readLongFromUser() throws IOException {
+        long rawLong;
+        while (true) {
+            try {
+                rawLong = Long.parseLong(in.readLine());
+                if (rawLong >= 1000000000) {
+                    return rawLong;
+                }
+            } catch (NumberFormatException e) {
+
+            }
+            out.println("Please enter a number in proper format");
+        }
     }
 }

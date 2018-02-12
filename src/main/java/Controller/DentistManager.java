@@ -32,7 +32,7 @@ public class DentistManager {
         textUI = new TextUI();
         this.loadUser();
 //        this.loadPatient();
-//        this.loadProvider();
+        this.loadProvider();
 //        this.loadAppointment();
     }
 
@@ -58,7 +58,7 @@ public class DentistManager {
                         editProviders();
                         break;
                     case EDIT_PATIENTS:
-                        //richie will do
+                        editPatients();
                         break;
                     case VIEW_APPOINTMENTS:
                         appointmentView();
@@ -77,6 +77,66 @@ public class DentistManager {
             }
         }
 
+    }
+
+    private void editPatients() throws IOException {
+        final int ADD = 1, EDIT = 2, REMOVE = 3, QUIT = 4;
+
+        Map<Integer, String> patientMenu = new HashMap<>();
+        patientMenu.put(ADD, "Add Patient");
+        patientMenu.put(EDIT, "Edit Patient");
+        patientMenu.put(REMOVE, "Remove Patient");
+        patientMenu.put(QUIT, "Go Back");
+
+        int selection = this.textUI.showMenu(patientMenu);
+        switch (selection) {
+            case (ADD):
+                addPatient();
+                break;
+            case (EDIT):
+                editPatient();
+                break;
+            case (REMOVE):
+                removePatient();
+                break;
+            case (QUIT):
+                break;
+            default:
+                throw new IllegalArgumentException("Did not expect: " + selection);
+        }
+    }
+
+    private void editPatient() {
+    }
+
+    private void addPatient() throws IOException {
+        String fName;
+        String lName;
+        long pNum;
+        int id;
+        String cName;
+        long gId;
+        String mId;
+        String pCard;
+        textUI.display("Enter their First Name");
+        fName = textUI.readStringFromUser();
+        textUI.display("Enter their Last Name");
+        lName = textUI.readStringFromUser();
+        textUI.display("Enter their ID");
+        id = readIdforPatient();
+        textUI.display("Enter their Phone Number");
+        pNum = textUI.readLongFromUser();
+        textUI.display("Please enter a payment card");
+        pCard = textUI.readStringFromUser();
+        textUI.display("Please enter an insurance company name");
+        cName = textUI.readStringFromUser();
+        textUI.display("Please enter a group ID (a number)");
+        gId = textUI.readLongFromUser();
+        textUI.display("Please enter a member ID for your insurance");
+        mId = textUI.readStringFromUser();
+        Insurance insurance = InsuranceFactory.getInstance(cName, gId, mId);
+        Patient patient = PatientFactory.getInstance(fName, lName, id, pNum, (InsuranceImpl) insurance, pCard);
+        patientList.add(patient);
     }
 
     private void appointmentView() throws IOException {
@@ -142,9 +202,9 @@ public class DentistManager {
     private void appProcedureSearch() throws IOException {
         this.textUI.display("What is the Procedure code you wish to see?");
         String lookUp = this.textUI.readStringFromUser();
-        for(int i = 0; i < appointment.size(); i++) {
-            for(int j = 0; i < appointment.get(i).getProcedures().size(); j++) {
-                if(appointment.get(i).getProcedures().get(j).getCode().equalsIgnoreCase(lookUp)) {
+        for (int i = 0; i < appointment.size(); i++) {
+            for (int j = 0; i < appointment.get(i).getProcedures().size(); j++) {
+                if (appointment.get(i).getProcedures().get(j).getCode().equalsIgnoreCase(lookUp)) {
                     this.textUI.display(appointment.get(i).toString());
                 }
             }
@@ -228,7 +288,7 @@ public class DentistManager {
     }
 
     private void removeAppointment() {
-        //remove the specified appointment
+
     }
 
     private void editAppointment() {
@@ -264,8 +324,8 @@ public class DentistManager {
                     tmp = removeProcedure(tmp);
                     break;
                 case (QUIT):
-                isDone = true;
-                break;
+                    isDone = true;
+                    break;
                 default:
                     textUI.display(selection + " is not a valid input please retry.");
             }
@@ -290,7 +350,7 @@ public class DentistManager {
         return tmp;
     }
 
-    private Procedure addProcedure() throws IOException{
+    private Procedure addProcedure() throws IOException {
 //        patient, provider, code, description, amount
         Patient appPatient = addProcedurePatient();
         Provider appProvider = addProcedureProvider();
@@ -306,9 +366,9 @@ public class DentistManager {
 
     // concerned on the implementation of this class.
     private Patient addProcedurePatient() throws IOException {
-       boolean isPatient = false;
-       int lookUp = 0;
-        while(!isPatient) {
+        boolean isPatient = false;
+        int lookUp = 0;
+        while (!isPatient) {
             this.textUI.display("What is the Patient ID you with to associate with this Procedure?");
             lookUp = this.textUI.readIntFromUser();
             for (int i = 0; i < patientList.size(); i++) {
@@ -325,7 +385,7 @@ public class DentistManager {
     private Provider addProcedureProvider() throws IOException {
         boolean isProvider = false;
         int lookUp = 0;
-        while(!isProvider) {
+        while (!isProvider) {
             this.textUI.display("What is the Provider ID associated with this procedure?");
             lookUp = this.textUI.readIntFromUser();
             for (int i = 0; i < providerList.size(); i++) {
@@ -334,7 +394,7 @@ public class DentistManager {
                     isProvider = true;
                 }
             }
-           this.textUI.display("The provider ID was not found please try again.");
+            this.textUI.display("The provider ID was not found please try again.");
         }
         return providerList.get(lookUp);
     }
@@ -342,7 +402,7 @@ public class DentistManager {
     private String addProcedureCode() throws IOException {
         boolean isValid = false;
         String lookUp = "";
-        while(!isValid) {
+        while (!isValid) {
             this.textUI.display("What is the code for this Procedure?");
             lookUp = this.textUI.readStringFromUser();
             isValid = verifyCode(lookUp);
@@ -360,8 +420,8 @@ public class DentistManager {
     private String addProcedureDescription() throws IOException {
         boolean isValid = false;
         String description = "";
-        while(!isValid) {
-            if(description.equalsIgnoreCase("") || description.isEmpty()){
+        while (!isValid) {
+            if (description.equalsIgnoreCase("") || description.isEmpty()) {
                 this.textUI.display("What is the description of this procedure?");
                 description = this.textUI.readStringFromUser();
             }
@@ -373,10 +433,10 @@ public class DentistManager {
     private double addProcedureAmount() throws IOException {
         boolean isValid = false;
         double amt = 0;
-        while(!isValid){
-            if(amt == 0 || amt < 0) {
+        while (!isValid) {
+            if (amt == 0 || amt < 0) {
                 this.textUI.display("What is the cost of this procedure?");
-                amt= this.textUI.getDoubleFromUser();
+                amt = this.textUI.getDoubleFromUser();
             }
         }
         return amt;
@@ -458,21 +518,16 @@ public class DentistManager {
     }
 
     private int readIdforProvider() throws IOException {
-        if (providerList.isEmpty()) {
-            int holders;
-            holders = textUI.readIntFromUser();
-            return holders;
-        } else {
-            int holdin;
-            holdin = textUI.readIntFromUser();
-            for (int i = 0; i < providerList.size(); i++) {
-                if (holdin == providerList.get(i).getId()) {
-                    textUI.display("That id is taken try a different one");
-                    holdin = textUI.readIntFromUser();
-                }
+
+        int holdin;
+        holdin = textUI.readIntFromUser();
+        for (int i = 0; i < providerList.size(); i++) {
+            if (holdin == providerList.get(i).getId()) {
+                textUI.display("That id is taken try a different one");
+                holdin = textUI.readIntFromUser();
             }
-            return holdin;
         }
+        return holdin;
     }
 
     private int readIdforPatient() throws IOException {
