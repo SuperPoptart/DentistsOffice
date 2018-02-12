@@ -17,6 +17,7 @@ public class DentistManager {
     private PatientList patientList;
     private ProviderList providerList;
     private static UserImpl holder;
+    private static final int CHANGE_PASSWORD = 1;
     private static final int EDIT_USERS = 1;
     private static final int EDIT_PROVIDERS = 2;
     private static final int EDIT_PATIENTS = 3;
@@ -33,7 +34,6 @@ public class DentistManager {
         this.loadPatient();
         this.loadProvider();
 //        this.loadAppointment();
-        String plzWork = "Please work";
     }
 
     public void run() throws IOException {
@@ -42,9 +42,6 @@ public class DentistManager {
         displayPatients();
         displayProviders();
         checkEmpty();
-
-        Provider provider = ProviderFactory.getInstance("Hello", "Johnson", 1, "ItsaDoctor");
-        textUI.display(provider.toString());
 
         while (!exitTime) {
             exitTime = login();
@@ -78,10 +75,54 @@ public class DentistManager {
 
                 }
             } else {
-                //fill with normal user menu also richie
+                int selection = textUI.showMenu(generateNonAdminOptions());
+                switch (selection) {
+                    case CHANGE_PASSWORD:
+                        changePassword();
+                        break;
+                    case EDIT_PROVIDERS:
+                        editProviders();
+                        break;
+                    case EDIT_PATIENTS:
+                        editPatients();
+                        break;
+                    case VIEW_APPOINTMENTS:
+                        appointmentView();
+                        break;
+                    case EXIT:
+                        this.saveUser();
+                        this.savePatient();
+                        this.saveProvider();
+                        this.saveAppointment();
+                        exitTime = false;
+                    default:
+
+                }
             }
         }
 
+    }
+
+    private void changePassword() throws IOException {
+        String holding;
+        textUI.display("Please enter your current password");
+        holding = textUI.readStringFromUser();
+        boolean runnin = true;
+        while (runnin) {
+            if (holding.equals(holder.getPassword())) {
+                for (int i = 0; i < usersList.size(); i++) {
+                    if (holding.equals(usersList.get(i).getPassword())) {
+                        textUI.display("Enter your new password");
+                        holding = textUI.readStringFromUser();
+                        usersList.get(i).setPassword(holding);
+                        runnin = false;
+                    }
+                }
+            }else{
+                textUI.display("Please enter your CURRENT password");
+                holding = textUI.readStringFromUser();
+            }
+        }
     }
 
     private void displayProviders() {
@@ -791,6 +832,16 @@ public class DentistManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Map<Integer, String> generateNonAdminOptions() {
+        Map<Integer, String> options = new HashMap<>();
+        options.put(CHANGE_PASSWORD, "Change Password");
+        options.put(EDIT_PROVIDERS, "Edit Providers");
+        options.put(EDIT_PATIENTS, "Edit Patients");
+        options.put(VIEW_APPOINTMENTS, "View Appointments");
+        options.put(EXIT, "Exit");
+        return options;
     }
 
     private Map<Integer, String> generateMenuOptions() {
