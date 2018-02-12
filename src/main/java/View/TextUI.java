@@ -143,4 +143,25 @@ public class TextUI {
             out.println("Please enter a number in proper format");
         }
     }
+
+    /**
+     * returns a card number if entered correctly
+     *
+     * @return card number
+     * @throws IOException throws
+     */
+    public String readCardNumber() throws IOException {
+        String rawCard;
+        while (true) {
+            try {
+                rawCard = in.readLine();
+                if (rawCard.length() == 24) {
+                    return rawCard;
+                }
+            } catch (NumberFormatException e) {
+
+            }
+            out.println("Please enter a 24 digit card number");
+        }
+    }
 }

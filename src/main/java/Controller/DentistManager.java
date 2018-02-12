@@ -2,7 +2,6 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -106,7 +105,27 @@ public class DentistManager {
         }
     }
 
-    private void editPatient() {
+    private void removePatient() throws IOException {
+        int hold;
+        textUI.display("Enter the patients id you'd like to delete:");
+        hold = readIdforPatient();
+        for (int i = 0; i < patientList.size(); i++) {
+            if (patientList.get(i).getId() == hold) {
+                patientList.remove(i);
+            }
+        }
+    }
+
+    private void editPatient() throws IOException {
+        int hold;
+        textUI.display("Enter the patients id you'd like to change:");
+        hold = readIdforPatient();
+        for (int i = 0; i < patientList.size(); i++) {
+            if (patientList.get(i).getId() == hold) {
+                patientList.remove(i);
+                addPatient();
+            }
+        }
     }
 
     private void addPatient() throws IOException {
@@ -127,7 +146,7 @@ public class DentistManager {
         textUI.display("Enter their Phone Number");
         pNum = textUI.readLongFromUser();
         textUI.display("Please enter a payment card");
-        pCard = textUI.readStringFromUser();
+        pCard = textUI.readCardNumber();
         textUI.display("Please enter an insurance company name");
         cName = textUI.readStringFromUser();
         textUI.display("Please enter a group ID (a number)");
@@ -415,6 +434,7 @@ public class DentistManager {
         String[] codeCheck = new String[codeSize];
         //how would I do this one?
         //returns true for good, and false for not.
+        return true;
     }
 
     private String addProcedureDescription() throws IOException {
@@ -492,7 +512,7 @@ public class DentistManager {
         int hold;
         textUI.display("Enter the providers id you'd like to change:");
         hold = readIdforProvider();
-        for (int i = 0; i < usersList.size(); i++) {
+        for (int i = 0; i < providerList.size(); i++) {
             if (providerList.get(i).getId() == hold) {
                 providerList.remove(i);
                 addProvider();
@@ -552,7 +572,7 @@ public class DentistManager {
         int hold;
         textUI.display("Enter the providers id you'd like to delete:");
         hold = readIdforProvider();
-        for (int i = 0; i < usersList.size(); i++) {
+        for (int i = 0; i < providerList.size(); i++) {
             if (providerList.get(i).getId() == hold) {
                 providerList.remove(i);
             }
