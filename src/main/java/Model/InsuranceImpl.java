@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * represents insurance information
  */
-public class InsuranceImpl implements Insurance {
+public class InsuranceImpl implements Insurance, Serializable{
 
     private String companyName;
     private long groupID;

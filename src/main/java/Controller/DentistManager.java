@@ -30,7 +30,7 @@ public class DentistManager {
         patientList = new PatientList();
         textUI = new TextUI();
         this.loadUser();
-//        this.loadPatient();
+        this.loadPatient();
         this.loadProvider();
 //        this.loadAppointment();
         String plzWork = "Please work";
@@ -39,7 +39,12 @@ public class DentistManager {
     public void run() throws IOException {
         boolean exitTime = false;
 
+        displayPatients();
+        displayProviders();
         checkEmpty();
+
+        Provider provider = ProviderFactory.getInstance("Hello", "Johnson", 1, "ItsaDoctor");
+        textUI.display(provider.toString());
 
         while (!exitTime) {
             exitTime = login();
@@ -77,6 +82,18 @@ public class DentistManager {
             }
         }
 
+    }
+
+    private void displayProviders() {
+        for (int i = 0; i < providerList.size(); i++) {
+            textUI.display(providerList.get(i).toString());
+        }
+    }
+
+    private void displayPatients() {
+        for (int i = 0; i < patientList.size(); i++) {
+            textUI.display(patientList.get(i).toString());
+        }
     }
 
     private void editPatients() throws IOException {
@@ -467,17 +484,18 @@ public class DentistManager {
         Calendar tmp = Calendar.getInstance();
 
         this.textUI.display("What is the year for this appointment? (IE 00)");
-        int appYear = this.textUI.readIntFromUser();
+        int appYear = textUI.readIntFromUser();
         this.textUI.display("What is the month for this appointment??(IE 00)");
-        int appMonth = this.textUI.readIntFromUser();
+        int appMonth = textUI.readIntFromUser();
         this.textUI.display("What is the day for this appointment?? (IE 00)");
-        int appDay = this.textUI.readIntFromUser();
+        int appDay = textUI.readIntFromUser();
         this.textUI.display("What is the hour for this appointment?? (IE 00)");
-        int appHour = this.textUI.readIntFromUser();
+        int appHour = textUI.readIntFromUser();
         this.textUI.display("What is the minute for this appointment??");
-        int appMin = this.textUI.readIntFromUser();
+        int appMin = textUI.readIntFromUser();
 
         tmp.set(appYear, appMonth, appDay, appHour, appMin);
+
         return tmp;
     }
 
@@ -533,7 +551,7 @@ public class DentistManager {
         title = textUI.readStringFromUser();
         textUI.display("Enter their ID");
         id = readIdforProvider();
-        Provider provider = new ProviderImpl(fName, lName, id, title);
+        Provider provider = ProviderFactory.getInstance(fName, lName, id, title);
         providerList.add(provider);
     }
 
@@ -566,6 +584,26 @@ public class DentistManager {
             }
             return holdin;
         }
+    }
+
+    private Patient readIdforSortPatient() throws IOException {
+        while (true) {
+            if (patientList.isEmpty()) {
+                textUI.display("You need to add a patient first!");
+                break;
+            } else {
+                int holdin;
+                holdin = textUI.readIntFromUser();
+                for (int i = 0; i < patientList.size(); i++) {
+                    if (holdin == patientList.get(i).getId()) {
+                        return patientList.get(i);
+                    }
+                }
+                textUI.display("You must enter a patient ID that is in the system!");
+                holdin = textUI.readIntFromUser();
+            }
+        }
+        return null;
     }
 
     private void removeProvider() throws IOException {

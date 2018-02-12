@@ -94,8 +94,8 @@ public class PatientImpl extends PersonImpl implements Patient, Serializable {
      * @param paymentCard payment card
      */
     public void setPaymentCard(String paymentCard) {
-        if (paymentCard.length() < 24 || paymentCard.length() > 24) {
-            throw new IllegalArgumentException("You must have a card length that is 24 digits long!");
+        if (paymentCard.length() < 16 || paymentCard.length() > 16) {
+            throw new IllegalArgumentException("You must have a card length that is 16 digits long!");
         }
         this.paymentCard = paymentCard;
     }

@@ -155,13 +155,13 @@ public class TextUI {
         while (true) {
             try {
                 rawCard = in.readLine();
-                if (rawCard.length() == 24) {
+                if (rawCard.length() == 16) {
                     return rawCard;
                 }
             } catch (NumberFormatException e) {
 
             }
-            out.println("Please enter a 24 digit card number");
+            out.println("Please enter a 16 digit card number");
         }
     }
 }

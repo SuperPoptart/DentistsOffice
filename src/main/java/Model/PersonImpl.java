@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * represents a person
  */
-public class PersonImpl implements Person, Comparable<Person> {
+public class PersonImpl implements Person, Comparable<Person>, Serializable {
 
     private String firstName;
     private String lastName;
