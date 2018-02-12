@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public class DentistManager {
         int selection = this.textUI.showMenu(appMenu);
         switch (selection) {
             case (ADD):
-//                addAppointment();
+                addAppointment();
                 break;
             case (EDIT):
 //                editAppointment();
@@ -234,8 +235,170 @@ public class DentistManager {
         //edit a specified appointment
     }
 
-    private void addAppointment() {
-        //add a new appointment
+    private void addAppointment() throws IOException {
+        Appointment tmp = new Appointment();
+        ArrayList<Procedure> appProcedure = new ProcedureList();
+
+        Calendar appTime = makeAppTime();
+        appProcedure = makeAppProcedures();
+
+        tmp.setProcedures(appProcedure);
+        tmp.setTime(appTime);
+
+        appointment.add(tmp);
+
+    }
+
+    private ArrayList<Procedure> makeAppProcedures() throws IOException {
+        ArrayList<Procedure> tmp = new ProcedureList();
+        boolean isDone = false;
+
+        while (!isDone) {
+            final int ADD = 1, REMOVE = 2, QUIT = 3;
+            int selection = this.textUI.readIntFromUser();
+            switch (selection) {
+                case (ADD):
+                    tmp.add(addProcedure());
+                    break;
+                case (REMOVE):
+                    tmp = removeProcedure(tmp);
+                    break;
+                case (QUIT):
+                isDone = true;
+                break;
+                default:
+                    textUI.display(selection + " is not a valid input please retry.");
+            }
+        }
+        return tmp;
+    }
+
+    private ArrayList<Procedure> removeProcedure(ArrayList<Procedure> tmp) throws IOException {
+
+        boolean isRemovable = false;
+        while (!isRemovable) {
+            this.textUI.display("What is the code of the Procedure you wish to remove?");
+            String remove = this.textUI.readStringFromUser();
+            for (int i = 0; i < tmp.size(); i++) {
+                if (remove.equalsIgnoreCase(tmp.get(i).getCode())) {
+                    tmp.remove(i);
+                    isRemovable = true;
+                }
+            }
+
+        }
+        return tmp;
+    }
+
+    private Procedure addProcedure() throws IOException{
+//        patient, provider, code, description, amount
+        Patient appPatient = addProcedurePatient();
+        Provider appProvider = addProcedureProvider();
+        String code = addProcedureCode();
+        String description = addProcedureDescription();
+        double amount = addProcedureAmount();
+
+        Procedure appProcedure = new ProcedureImpl(appPatient, appProvider, code, description, amount);
+
+        return appProcedure;
+
+    }
+
+    // concerned on the implementation of this class.
+    private Patient addProcedurePatient() throws IOException {
+       boolean isPatient = false;
+       int lookUp = 0;
+        while(!isPatient) {
+            this.textUI.display("What is the Patient ID you with to associate with this Procedure?");
+            lookUp = this.textUI.readIntFromUser();
+            for (int i = 0; i < patientList.size(); i++) {
+                if (lookUp == patientList.get(i).getId()) {
+                    lookUp = i;
+                    isPatient = true;
+                }
+            }
+            this.textUI.display("The Patient ID was not found please try again.");
+        }
+        return patientList.get(lookUp);
+    }
+
+    private Provider addProcedureProvider() throws IOException {
+        boolean isProvider = false;
+        int lookUp = 0;
+        while(!isProvider) {
+            this.textUI.display("What is the Provider ID associated with this procedure?");
+            lookUp = this.textUI.readIntFromUser();
+            for (int i = 0; i < providerList.size(); i++) {
+                if (lookUp == providerList.get(i).getId()) {
+                    lookUp = i;
+                    isProvider = true;
+                }
+            }
+           this.textUI.display("The provider ID was not found please try again.");
+        }
+        return providerList.get(lookUp);
+    }
+
+    private String addProcedureCode() throws IOException {
+        boolean isValid = false;
+        String lookUp = "";
+        while(!isValid) {
+            this.textUI.display("What is the code for this Procedure?");
+            lookUp = this.textUI.readStringFromUser();
+            isValid = verifyCode(lookUp);
+        }
+        return lookUp;
+    }
+
+    private boolean verifyCode(String lookUp) {
+        int codeSize = 6;
+        String[] codeCheck = new String[codeSize];
+        //how would I do this one?
+        //returns true for good, and false for not.
+    }
+
+    private String addProcedureDescription() throws IOException {
+        boolean isValid = false;
+        String description = "";
+        while(!isValid) {
+            if(description.equalsIgnoreCase("") || description.isEmpty()){
+                this.textUI.display("What is the description of this procedure?");
+                description = this.textUI.readStringFromUser();
+            }
+            isValid = true;
+        }
+        return description;
+    }
+
+    private double addProcedureAmount() throws IOException {
+        boolean isValid = false;
+        double amt = 0;
+        while(!isValid){
+            if(amt == 0 || amt < 0) {
+                this.textUI.display("What is the cost of this procedure?");
+                amt= this.textUI.getDoubleFromUser();
+            }
+        }
+        return amt;
+    }
+
+
+    private Calendar makeAppTime() throws IOException {
+        Calendar tmp = Calendar.getInstance();
+
+        this.textUI.display("What is the year for this appointment? (IE 00)");
+        int appYear = this.textUI.readIntFromUser();
+        this.textUI.display("What is the month for this appointment??(IE 00)");
+        int appMonth = this.textUI.readIntFromUser();
+        this.textUI.display("What is the day for this appointment?? (IE 00)");
+        int appDay = this.textUI.readIntFromUser();
+        this.textUI.display("What is the hour for this appointment?? (IE 00)");
+        int appHour = this.textUI.readIntFromUser();
+        this.textUI.display("What is the minute for this appointment??");
+        int appMin = this.textUI.readIntFromUser();
+
+        tmp.set(appYear, appMonth, appDay, appHour, appMin);
+        return tmp;
     }
 
     private void editProviders() throws IOException {

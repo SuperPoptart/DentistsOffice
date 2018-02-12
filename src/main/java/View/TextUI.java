@@ -108,4 +108,15 @@ public class TextUI {
         rawInt = Integer.parseInt(in.readLine());
         return rawInt;
     }
+
+    /**
+     * reads a double from user
+     * @return the double
+     * @throws IOException throws
+     */
+    public double getDoubleFromUser() throws IOException {
+        double rawDouble;
+        rawDouble = Double.parseDouble(in.readLine());
+        return rawDouble;
+    }
 }
