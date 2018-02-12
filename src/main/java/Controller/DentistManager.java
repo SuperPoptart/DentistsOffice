@@ -33,6 +33,7 @@ public class DentistManager {
 //        this.loadPatient();
         this.loadProvider();
 //        this.loadAppointment();
+        String plzWork = "Please work";
     }
 
     public void run() throws IOException {
@@ -270,7 +271,7 @@ public class DentistManager {
     }
 
     private Calendar makeMinTime() throws IOException {
-        Calendar min = makeMinTime();
+        Calendar min = Calendar.getInstance();
         this.textUI.display("What is the earliest year you wish to see? (IE 00)");
         int minYear = this.textUI.readIntFromUser();
         this.textUI.display("What is the earliest month in this year you wish to see?(IE 00)");
@@ -289,7 +290,6 @@ public class DentistManager {
 
     private Calendar makeMaxTime() throws IOException {
         Calendar max = Calendar.getInstance();
-
         this.textUI.display("What is the latest year you wish to see? (IE 00)");
         int maxYear = this.textUI.readIntFromUser();
         this.textUI.display("What is the latest month in this year you wish to see?(IE 00)");
@@ -712,8 +712,8 @@ public class DentistManager {
     private static final String patfilename = "patients.sav";
 
     private void saveAppointment() throws IOException {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(apfilename))) {
-            out.writeObject(this.appointment);
+                try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(apfilename))) {
+                    out.writeObject(this.appointment);
         }
     }
 
