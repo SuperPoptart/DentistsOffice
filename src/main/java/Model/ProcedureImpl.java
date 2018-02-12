@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * represents a procedure
  */
-public class ProcedureImpl implements Procedure {
+public class ProcedureImpl implements Procedure, Serializable {
 
     private Patient patient;
     private Provider provider;
