@@ -168,7 +168,7 @@ public class DentistManager {
         textUI.display("Please enter an insurance company name");
         cName = textUI.readStringFromUser();
         textUI.display("Please enter a group ID (a number)");
-        gId = textUI.readLongFromUser();
+        gId = textUI.readLongNormFromUser();
         textUI.display("Please enter a member ID for your insurance");
         mId = textUI.readStringFromUser();
         Insurance insurance = InsuranceFactory.getInstance(cName, gId, mId);
@@ -586,26 +586,6 @@ public class DentistManager {
         }
     }
 
-    private Patient readIdforSortPatient() throws IOException {
-        while (true) {
-            if (patientList.isEmpty()) {
-                textUI.display("You need to add a patient first!");
-                break;
-            } else {
-                int holdin;
-                holdin = textUI.readIntFromUser();
-                for (int i = 0; i < patientList.size(); i++) {
-                    if (holdin == patientList.get(i).getId()) {
-                        return patientList.get(i);
-                    }
-                }
-                textUI.display("You must enter a patient ID that is in the system!");
-                holdin = textUI.readIntFromUser();
-            }
-        }
-        return null;
-    }
-
     private void removeProvider() throws IOException {
         int hold;
         textUI.display("Enter the providers id you'd like to delete:");
@@ -750,8 +730,8 @@ public class DentistManager {
     private static final String patfilename = "patients.sav";
 
     private void saveAppointment() throws IOException {
-                try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(apfilename))) {
-                    out.writeObject(this.appointment);
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(apfilename))) {
+            out.writeObject(this.appointment);
         }
     }
 

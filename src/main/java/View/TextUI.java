@@ -164,4 +164,23 @@ public class TextUI {
             out.println("Please enter a 16 digit card number");
         }
     }
+
+    /**
+     * reads a normal long
+     *
+     * @return long
+     * @throws IOException throws
+     */
+    public long readLongNormFromUser() throws IOException {
+        long rawLong;
+        while (true) {
+            try {
+                rawLong = Long.parseLong(in.readLine());
+                return rawLong;
+            } catch (NumberFormatException e) {
+
+            }
+            out.println("Please enter a number in proper format");
+        }
+    }
 }
