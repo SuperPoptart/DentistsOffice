@@ -1,6 +1,6 @@
 package Model;
 
-public interface Provider {
+public interface Provider extends Person{
 
     public String getTitle();
 

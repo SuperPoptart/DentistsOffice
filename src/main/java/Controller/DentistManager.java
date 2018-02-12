@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -38,11 +39,8 @@ public class DentistManager {
 
     public void run() throws IOException {
         boolean exitTime = false;
-
-        displayPatients();
-        displayProviders();
         checkEmpty();
-
+        displayPatients();
         while (!exitTime) {
             exitTime = login();
             if (!exitTime) {
@@ -118,7 +116,7 @@ public class DentistManager {
                         runnin = false;
                     }
                 }
-            }else{
+            } else {
                 textUI.display("Please enter your CURRENT password");
                 holding = textUI.readStringFromUser();
             }
@@ -167,7 +165,7 @@ public class DentistManager {
     private void removePatient() throws IOException {
         int hold;
         textUI.display("Enter the patients id you'd like to delete:");
-        hold = readIdforPatient();
+        hold = textUI.readIntFromUser();
         for (int i = 0; i < patientList.size(); i++) {
             if (patientList.get(i).getId() == hold) {
                 patientList.remove(i);
@@ -183,7 +181,7 @@ public class DentistManager {
             if (patientList.get(i).getId() == hold) {
                 patientList.remove(i);
                 addPatient();
-            }
+            } else textUI.display("This patient doesn't exist!");
         }
     }
 
@@ -214,6 +212,17 @@ public class DentistManager {
         mId = textUI.readStringFromUser();
         Insurance insurance = InsuranceFactory.getInstance(cName, gId, mId);
         Patient patient = PatientFactory.getInstance(fName, lName, id, pNum, (InsuranceImpl) insurance, pCard);
+        boolean patientCheck = readIdforPatientImp(patient);
+        int ids;
+        while (!patientCheck) {
+            if (readIdforPatientImp(patient)) {
+                patientCheck = true;
+            } else if (!readIdforPatientImp(patient)) {
+                textUI.display("That id is in use, please type another one!");
+                ids = textUI.readIntFromUser();
+                patient = PatientFactory.getInstance(fName, lName, ids, pNum, (InsuranceImpl) insurance, pCard);
+            }
+        }
         patientList.add(patient);
     }
 
@@ -392,7 +401,11 @@ public class DentistManager {
 
         while (!isDone) {
             final int ADD = 1, REMOVE = 2, QUIT = 3;
-            int selection = this.textUI.readIntFromUser();
+            Map<Integer, String> options = new HashMap<>();
+            options.put(ADD, "Add Procedure");
+            options.put(REMOVE, "Remove Procedure");
+            options.put(QUIT, "Quit");
+            int selection = textUI.showMenu(options);
             switch (selection) {
                 case (ADD):
                     tmp.add(addProcedure());
@@ -570,12 +583,12 @@ public class DentistManager {
     private void editProvider() throws IOException {
         int hold;
         textUI.display("Enter the providers id you'd like to change:");
-        hold = readIdforProvider();
+        hold = textUI.readIntFromUser();
         for (int i = 0; i < providerList.size(); i++) {
             if (providerList.get(i).getId() == hold) {
                 providerList.remove(i);
                 addProvider();
-            }
+            } else textUI.display("This provider doesn't exist!");
         }
     }
 
@@ -591,22 +604,43 @@ public class DentistManager {
         textUI.display("Enter their Title");
         title = textUI.readStringFromUser();
         textUI.display("Enter their ID");
-        id = readIdforProvider();
+        id = textUI.readIntFromUser();
         Provider provider = ProviderFactory.getInstance(fName, lName, id, title);
-        providerList.add(provider);
-    }
-
-    private int readIdforProvider() throws IOException {
-
-        int holdin;
-        holdin = textUI.readIntFromUser();
-        for (int i = 0; i < providerList.size(); i++) {
-            if (holdin == providerList.get(i).getId()) {
-                textUI.display("That id is taken try a different one");
-                holdin = textUI.readIntFromUser();
+        boolean justKillMe = readIdforProvider(provider);
+        int ids;
+        while (!justKillMe) {
+            if (readIdforProvider(provider)) {
+                justKillMe = true;
+            } else if (!readIdforProvider(provider)) {
+                textUI.display("That id is in use, please type another one!");
+                ids = textUI.readIntFromUser();
+                provider = ProviderFactory.getInstance(fName, lName, ids, title);
             }
         }
-        return holdin;
+        providerList.add(provider);
+
+    }
+
+    private boolean readIdforProvider(Provider provider) throws IOException {
+
+        for (int i = 0; i < providerList.size(); i++) {
+            if (providerList.get(i).equals(provider)) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    private boolean readIdforPatientImp(Patient patient) throws IOException {
+
+        for (int i = 0; i < patientList.size(); i++) {
+            if (patientList.get(i).equals(patient)) {
+                return false;
+            }
+        }
+        return true;
+
     }
 
     private int readIdforPatient() throws IOException {
@@ -630,7 +664,7 @@ public class DentistManager {
     private void removeProvider() throws IOException {
         int hold;
         textUI.display("Enter the providers id you'd like to delete:");
-        hold = readIdforProvider();
+        hold = textUI.readIntFromUser();
         for (int i = 0; i < providerList.size(); i++) {
             if (providerList.get(i).getId() == hold) {
                 providerList.remove(i);
