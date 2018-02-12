@@ -9,13 +9,13 @@ import java.util.Calendar;
 public class Appointment {
 
     private Calendar time;
-    private ArrayList<Procedure> procedures;
+    private ProcedureList procedures;
 
     /**
      * default constructor
      */
     public Appointment() {
-        this.procedures = new ArrayList<Procedure>();
+        this.procedures = new ProcedureList();
     }
 
     /**
@@ -24,7 +24,7 @@ public class Appointment {
      * @param cal        calender
      * @param procedures list of procedures
      */
-    Appointment(Calendar cal, ArrayList<Procedure> procedures) {
+    Appointment(Calendar cal, ProcedureList procedures) {
         this.setTime(cal);
         this.setProcedures(procedures);
     }
@@ -55,7 +55,7 @@ public class Appointment {
      *
      * @return the list of procedures
      */
-    public ArrayList<Procedure> getProcedures() {
+    public ProcedureList getProcedures() {
         return procedures;
     }
 
@@ -64,7 +64,7 @@ public class Appointment {
      *
      * @param procedures list of procedures
      */
-    public void setProcedures(ArrayList<Procedure> procedures) {
+    public void setProcedures(ProcedureList procedures) {
         this.procedures = procedures;
     }
 

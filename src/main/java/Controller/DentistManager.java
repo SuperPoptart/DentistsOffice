@@ -374,7 +374,7 @@ public class DentistManager {
 
     private void addAppointment() throws IOException {
         Appointment tmp = new Appointment();
-        ArrayList<Procedure> appProcedure = new ProcedureList();
+        ProcedureList appProcedure = new ProcedureList();
 
         Calendar appTime = makeAppTime();
         appProcedure = makeAppProcedures();
@@ -386,8 +386,8 @@ public class DentistManager {
 
     }
 
-    private ArrayList<Procedure> makeAppProcedures() throws IOException {
-        ArrayList<Procedure> tmp = new ProcedureList();
+    private ProcedureList makeAppProcedures() throws IOException {
+        ProcedureList tmp = new ProcedureList();
         boolean isDone = false;
 
         while (!isDone) {
@@ -410,7 +410,7 @@ public class DentistManager {
         return tmp;
     }
 
-    private ArrayList<Procedure> removeProcedure(ArrayList<Procedure> tmp) throws IOException {
+    private ProcedureList removeProcedure(ProcedureList tmp) throws IOException {
 
         boolean isRemovable = false;
         while (!isRemovable) {
@@ -524,7 +524,7 @@ public class DentistManager {
     private Calendar makeAppTime() throws IOException {
         Calendar tmp = Calendar.getInstance();
 
-        this.textUI.display("What is the year for this appointment? (IE 00)");
+        this.textUI.display("What is the year for this appointment? (IE 0000)");
         int appYear = textUI.readIntFromUser();
         this.textUI.display("What is the month for this appointment??(IE 00)");
         int appMonth = textUI.readIntFromUser();
