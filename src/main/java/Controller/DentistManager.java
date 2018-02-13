@@ -125,13 +125,16 @@ public class DentistManager {
                 patientBalance();
                 break;
             case (COLLECTIONS):
-//                collections();
+                collections();
                 break;
             case (QUIT):
                 break;
             default:
                 throw new IllegalArgumentException("Did not expect: " + selection);
         }
+    }
+
+    private void collections() {
     }
 
     private void patientBalance() throws IOException {
@@ -144,15 +147,53 @@ public class DentistManager {
             if (another) {
                 PatientSortByName e = new PatientSortByName();
                 patientList.sort(e);
-                for (int k = 0 ; k<patientList.size() ; k++){
+                for (int k = 0; k < patientList.size(); k++) {
                     textUI.display(patientList.get(k).getLastName() + " owes : $" + getTotalPayments(appointment, patientList.get(k)));
                 }
+            } else if (!another) {
+                textUI.display("Do you want to sort by largest(0) or smallest(1)?");
+                boolean yetAnother = textUI.readBooleanFromUser();
+                if (yetAnother) {
+                    for (int i = 0; i < patientList.size(); i++) {
+                        for (int j = 0; j < patientList.size(); j++) {
+                            if (getTotalPayments(appointment, patientList.get(i)) > getTotalPayments(appointment, patientList.get(j))) {
+                                Patient holder;
+                                holder = patientList.get(j);
+                                patientList.set(j, patientList.get(i));
+                                patientList.set(i, holder);
+                            }
+                        }
+                    }
+                    for (int i = 0; i < patientList.size(); i++) {
+                        textUI.display(patientList.get(i).getLastName() + " owes : $" + getTotalPayments(appointment, patientList.get(i)));
+                    }
+                } else if (!yetAnother) {
+                    for (int i = 0; i < patientList.size(); i++) {
+                        for (int j = 0; j < patientList.size(); j++) {
+                            if (getTotalPayments(appointment, patientList.get(i)) < getTotalPayments(appointment, patientList.get(j))) {
+                                Patient holder;
+                                holder = patientList.get(j);
+                                patientList.set(j, patientList.get(i));
+                                patientList.set(i, holder);
+                            }
+                        }
+                    }
+                    for (int i = 0; i < patientList.size(); i++) {
+                        textUI.display(patientList.get(i).getLastName() + " owes : $" + getTotalPayments(appointment, patientList.get(i)));
+                    }
+
+                }
+            }
+        } else if (!choice) {
+            for (int k = 0; k < patientList.size(); k++) {
+                textUI.display(patientList.get(k).getLastName() + " owes : $" + getTotalPayments(appointment, patientList.get(k)));
             }
         }
     }
 
     /**
      * returns total payments due
+     *
      * @param e the list its comparing to
      * @return the total amount due
      */
@@ -161,8 +202,8 @@ public class DentistManager {
         Calendar cal = Calendar.getInstance();
         for (int i = 0; i < e.size(); i++) {
             for (int j = 0; j < e.get(i).getProcedures().size(); j++) {
-                if (e.get(i).getProcedures().get(j).getPatient().equals(p)){
-                    if(e.get(i).getTime().before(cal)){
+                if (e.get(i).getProcedures().get(j).getPatient().equals(p)) {
+                    if (e.get(i).getTime().before(cal)) {
                         total += e.get(i).getProcedures().get(j).getAmount();
                     }
                 }
@@ -1047,3 +1088,4 @@ class PatientSortByName implements Comparator<Patient> {
         return o1.getLastName().compareTo(o2.getLastName());
     }
 }
+

@@ -141,4 +141,5 @@ public class PatientImpl extends PersonImpl implements Patient, Serializable {
     public String getLastName() {
         return super.getLastName();
     }
+
 }
