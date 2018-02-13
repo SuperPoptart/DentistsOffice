@@ -36,7 +36,6 @@ public class DentistManager {
 
     public void run() throws IOException {
         boolean exitTime = false;
-        displayAppointments();
         checkEmpty();
 
         while (!exitTime) {
@@ -101,7 +100,7 @@ public class DentistManager {
 
     private void displayAppointments() {
         for (int i = 0; i < appointment.size(); i++) {
-            textUI.display(appointment.get(i).toString());
+            textUI.display((i + 1) + ". " + appointment.get(i).toString());
         }
     }
 
@@ -249,7 +248,7 @@ public class DentistManager {
                 editAppointment();
                 break;
             case (REMOVE):
-//                removeAppointment();
+                removeAppointment();
                 break;
             case (SEARCH):
                 searchAppointment();
@@ -390,13 +389,10 @@ public class DentistManager {
         return max;
     }
 
-    private void removeAppointment() {
-
-    }
-
-    private void editAppointment() throws IOException {
+    private void removeAppointment() throws IOException {
         int holdin;
-        textUI.display("Enter the appointment number on the list you'd like to edit!");
+        displayAppointments();
+        textUI.display("\nEnter the appointment number on the list you'd like to remove!");
         Set<Integer> valid = new TreeSet<Integer>();
         int MAX = appointment.size();
         Collection<Integer> addin = new TreeSet<Integer>();
@@ -406,7 +402,26 @@ public class DentistManager {
         valid.addAll(addin);
         holdin = textUI.readIntFromUser(valid);
         for (int i = 0; i < appointment.size(); i++) {
-            if (i == holdin) {
+            if (i == holdin - 1) {
+                appointment.remove(i);
+            }
+        }
+    }
+
+    private void editAppointment() throws IOException {
+        int holdin;
+        displayAppointments();
+        textUI.display("\nEnter the appointment number on the list you'd like to edit!");
+        Set<Integer> valid = new TreeSet<Integer>();
+        int MAX = appointment.size();
+        Collection<Integer> addin = new TreeSet<Integer>();
+        for (int i = 0; i < MAX; i++) {
+            addin.add(i + 1);
+        }
+        valid.addAll(addin);
+        holdin = textUI.readIntFromUser(valid);
+        for (int i = 0; i < appointment.size(); i++) {
+            if (i == holdin - 1) {
                 appointment.remove(i);
             }
         }
