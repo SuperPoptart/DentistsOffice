@@ -154,7 +154,7 @@ public class ProcedureImpl implements Procedure, Serializable {
     }
 
     public String toString() {
-        return this.getPatient() + ", " + this.getProvider() + ", " + this.getAmount() + ", " + this.getCode() + ", " + this.getDescription();
+        return this.getPatient() + ", " + this.getProvider() + ", $" + this.getAmount() + ", " + this.getCode() + ", " + this.getDescription();
     }
 
 

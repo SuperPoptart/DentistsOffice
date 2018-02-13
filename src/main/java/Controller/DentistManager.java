@@ -5,10 +5,7 @@ import View.TextUI;
 import com.sun.org.apache.regexp.internal.RE;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DentistManager {
 
@@ -34,13 +31,14 @@ public class DentistManager {
         this.loadUser();
         this.loadPatient();
         this.loadProvider();
-//        this.loadAppointment();
+        this.loadAppointment();
     }
 
     public void run() throws IOException {
         boolean exitTime = false;
+        displayAppointments();
         checkEmpty();
-        displayPatients();
+
         while (!exitTime) {
             exitTime = login();
             if (!exitTime) {
@@ -99,6 +97,12 @@ public class DentistManager {
             }
         }
 
+    }
+
+    private void displayAppointments() {
+        for (int i = 0; i < appointment.size(); i++) {
+            textUI.display(appointment.get(i).toString());
+        }
     }
 
     private void changePassword() throws IOException {
@@ -242,7 +246,7 @@ public class DentistManager {
                 addAppointment();
                 break;
             case (EDIT):
-//                editAppointment();
+                editAppointment();
                 break;
             case (REMOVE):
 //                removeAppointment();
@@ -257,84 +261,97 @@ public class DentistManager {
 
     private void searchAppointment() throws IOException {
         final int TIME = 1, PROVIDER = 2, PATIENT = 3, PROCEDURE = 4, QUIT = 5;
+        AppointmentList second = new AppointmentList();
+        second.clear();
+        second = appointment;
+        boolean response;
 
-        Map<Integer, String> searchMenu = new HashMap<>();
-        searchMenu.put(TIME, "By Time");
-        searchMenu.put(PROVIDER, "By Provider");
-        searchMenu.put(PATIENT, "By Patient");
-        searchMenu.put(PROCEDURE, "By Procedure");
-        searchMenu.put(QUIT, "Go Back");
-
-        int selection = this.textUI.showMenu(searchMenu);
-        switch (selection) {
-            case (TIME):
-                appTimeSearch();
-                break;
-            case (PROVIDER):
-                appProviderSearch();
-                break;
-            case (PATIENT):
-                appPatientSearch();
-                break;
-            case (PROCEDURE):
-                appProcedureSearch();
-                break;
-            case (QUIT):
-                break;
-            default:
-                this.textUI.display(selection + " is not valid selection.");
+        textUI.display("Would you like to search by time? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appTimeSearch(second);
+        } else {
         }
+        textUI.display("Would you like to search by Provider? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appProviderSearch(second);
+        } else {
+        }
+        textUI.display("Would you like to search by Patient? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appPatientSearch(second);
+        } else {
+        }
+        textUI.display("Would you like to search by Procedure? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appProcedureSearch(second);
+        } else {
+        }
+        for (int i = 0; i < second.size(); i++) {
+            textUI.display(second.get(i).toString());
+        }
+
     }
 
-    private void appProcedureSearch() throws IOException {
+    private void appProcedureSearch(AppointmentList appointment) throws IOException {
         this.textUI.display("What is the Procedure code you wish to see?");
         String lookUp = this.textUI.readStringFromUser();
         for (int i = 0; i < appointment.size(); i++) {
             for (int j = 0; i < appointment.get(i).getProcedures().size(); j++) {
                 if (appointment.get(i).getProcedures().get(j).getCode().equalsIgnoreCase(lookUp)) {
-                    this.textUI.display(appointment.get(i).toString());
+
+                } else {
+                    appointment.remove(i);
                 }
             }
         }
     }
 
-    private void appPatientSearch() throws IOException {
+    private void appPatientSearch(AppointmentList appointment) throws IOException {
         this.textUI.display("What is the ID number of the Patient you with to see?");
         int lookUp = this.textUI.readIntFromUser();
 
         for (int i = 0; i < appointment.size(); i++) {
             for (int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
                 if (appointment.get(i).getProcedures().get(j).getPatient().getId() == lookUp) {
-                    this.textUI.display(appointment.get(i).toString());
+
+                } else {
+                    appointment.remove(i);
                 }
             }
         }
     }
 
-    private void appProviderSearch() throws IOException {
+    private void appProviderSearch(AppointmentList appointment) throws IOException {
         this.textUI.display("What is the ID number of the Provider you with to see?");
         int lookUp = this.textUI.readIntFromUser();
 
         for (int i = 0; i < appointment.size(); i++) {
             for (int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
                 if (appointment.get(i).getProcedures().get(j).getProvider().getId() == lookUp) {
-                    this.textUI.display(appointment.get(i).toString());
+
+                } else {
+                    appointment.remove(i);
                 }
             }
         }
 
     }
 
-    private void appTimeSearch() throws IOException {
+    private void appTimeSearch(AppointmentList appointment) throws IOException {
         Calendar max = makeMaxTime();
         Calendar min = makeMinTime();
 
         for (int i = 0; i < appointment.size(); i++) {
             if (appointment.get(i).getTime().getTimeInMillis() < max.getTimeInMillis() && appointment.get(i).getTime().getTimeInMillis() > min.getTimeInMillis()) {
-                this.textUI.display(appointment.get(i).toString());
+
+            } else {
+                appointment.remove(i);
             }
         }
-
     }
 
     private Calendar makeMinTime() throws IOException {
@@ -377,8 +394,23 @@ public class DentistManager {
 
     }
 
-    private void editAppointment() {
-        //edit a specified appointment
+    private void editAppointment() throws IOException {
+        int holdin;
+        textUI.display("Enter the appointment number on the list you'd like to edit!");
+        Set<Integer> valid = new TreeSet<Integer>();
+        int MAX = appointment.size();
+        Collection<Integer> addin = new TreeSet<Integer>();
+        for (int i = 0; i < MAX; i++) {
+            addin.add(i + 1);
+        }
+        valid.addAll(addin);
+        holdin = textUI.readIntFromUser(valid);
+        for (int i = 0; i < appointment.size(); i++) {
+            if (i == holdin) {
+                appointment.remove(i);
+            }
+        }
+        addAppointment();
     }
 
     private void addAppointment() throws IOException {
@@ -456,37 +488,39 @@ public class DentistManager {
 
     // concerned on the implementation of this class.
     private Patient addProcedurePatient() throws IOException {
-        boolean isPatient = false;
-        int lookUp = 0;
-        while (!isPatient) {
-            this.textUI.display("What is the Patient ID you with to associate with this Procedure?");
-            lookUp = this.textUI.readIntFromUser();
+        textUI.display("Enter the ID of the patient for this procedure:");
+        int idHoldin;
+        boolean runner = true;
+        idHoldin = textUI.readIntFromUser();
+        while (runner) {
             for (int i = 0; i < patientList.size(); i++) {
-                if (lookUp == patientList.get(i).getId()) {
-                    lookUp = i;
-                    isPatient = true;
+                if (patientList.get(i).getId() == idHoldin) {
+                    return this.patientList.get(i);
                 }
             }
-            this.textUI.display("The Patient ID was not found please try again.");
+            textUI.display("Sorry this patient doesn't exit, try again!");
+            idHoldin = textUI.readIntFromUser();
         }
-        return patientList.get(lookUp);
+        Patient dont_be_here = PatientFactory.getInstance();
+        return dont_be_here;
     }
 
     private Provider addProcedureProvider() throws IOException {
-        boolean isProvider = false;
-        int lookUp = 0;
-        while (!isProvider) {
-            this.textUI.display("What is the Provider ID associated with this procedure?");
-            lookUp = this.textUI.readIntFromUser();
+        textUI.display("Enter the ID of the provider for this procedure:");
+        int idHoldin;
+        boolean runner = true;
+        idHoldin = textUI.readIntFromUser();
+        while (runner) {
             for (int i = 0; i < providerList.size(); i++) {
-                if (lookUp == providerList.get(i).getId()) {
-                    lookUp = i;
-                    isProvider = true;
+                if (providerList.get(i).getId() == idHoldin) {
+                    return this.providerList.get(i);
                 }
             }
-            this.textUI.display("The provider ID was not found please try again.");
+            textUI.display("Sorry this provider doesn't exit, try again!");
+            idHoldin = textUI.readIntFromUser();
         }
-        return providerList.get(lookUp);
+        Provider dont_be_here = ProviderFactory.getInstance();
+        return dont_be_here;
     }
 
     private String addProcedureCode() throws IOException {
@@ -528,6 +562,8 @@ public class DentistManager {
             if (amt == 0 || amt < 0) {
                 this.textUI.display("What is the cost of this procedure?");
                 amt = this.textUI.getDoubleFromUser();
+            } else {
+                return amt;
             }
         }
         return amt;
