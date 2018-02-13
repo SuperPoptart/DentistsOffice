@@ -2,7 +2,6 @@ package Controller;
 
 import Model.*;
 import View.TextUI;
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.io.*;
 import java.util.*;
@@ -20,6 +19,7 @@ public class DentistManager {
     private static final int EDIT_PROVIDERS = 2;
     private static final int EDIT_PATIENTS = 3;
     private static final int VIEW_APPOINTMENTS = 4;
+    private static final int REPORTS = 6;
     private static final int EXIT = 5;
 
     public DentistManager() throws IOException {
@@ -66,6 +66,10 @@ public class DentistManager {
                         this.saveProvider();
                         this.saveAppointment();
                         exitTime = false;
+                        break;
+                    case REPORTS:
+                        reportView();
+                        break;
                     default:
 
                 }
@@ -90,12 +94,43 @@ public class DentistManager {
                         this.saveProvider();
                         this.saveAppointment();
                         exitTime = false;
+                        break;
+                    case REPORTS:
+                        reportView();
+                        break;
                     default:
 
                 }
             }
         }
 
+    }
+
+    private void reportView() throws IOException {
+        final int PRODUCTION = 1, PATIENT_BALANCE = 2, COLLECTIONS = 3, QUIT = 4;
+
+        Map<Integer, String> reportMenu = new HashMap<>();
+        reportMenu.put(PRODUCTION, "Production");
+        reportMenu.put(PATIENT_BALANCE, "Patient Balance");
+        reportMenu.put(COLLECTIONS, "Collections");
+        reportMenu.put(QUIT, "Go Back");
+
+        int selection = this.textUI.showMenu(reportMenu);
+        switch (selection) {
+            case (PRODUCTION):
+                productionView();
+                break;
+            case (PATIENT_BALANCE):
+                patientBalance();
+                break;
+            case (COLLECTIONS):
+                collections();
+                break;
+            case (QUIT):
+                break;
+            default:
+                throw new IllegalArgumentException("Did not expect: " + selection);
+        }
     }
 
     private void displayAppointments() {
@@ -936,6 +971,7 @@ public class DentistManager {
         options.put(EDIT_PATIENTS, "Edit Patients");
         options.put(VIEW_APPOINTMENTS, "View Appointments");
         options.put(EXIT, "Exit");
+        options.put(REPORTS, "Reports");
         return options;
     }
 }
