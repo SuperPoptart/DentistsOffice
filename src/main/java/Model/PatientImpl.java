@@ -1,6 +1,8 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * represents a patient
@@ -123,5 +125,20 @@ public class PatientImpl extends PersonImpl implements Patient, Serializable {
     @Override
     public String toString() {
         return super.toString() + ", " + this.getPaymentCard() + ", " + this.getPhoneNumber() + ", " + this.getInsuranceImpl().toString();
+    }
+
+    public void setName(String fName, String lName) {
+        super.setFirstName(fName);
+        super.setLastName(lName);
+    }
+
+    @Override
+    public String getFirstName() {
+        return super.getFirstName();
+    }
+
+    @Override
+    public String getLastName() {
+        return super.getLastName();
     }
 }

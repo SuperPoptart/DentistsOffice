@@ -122,7 +122,7 @@ public class DentistManager {
                 productionView();
                 break;
             case (PATIENT_BALANCE):
-//                patientBalance();
+                patientBalance();
                 break;
             case (COLLECTIONS):
 //                collections();
@@ -134,21 +134,58 @@ public class DentistManager {
         }
     }
 
+    private void patientBalance() throws IOException {
+        textUI.display("Would you like to sort this? (Y = 0 / N = 1)");
+        boolean choice = textUI.readBooleanFromUser();
+
+        if (choice) {
+            textUI.display("How do you want to sort? (Name = 0 / Amount = 1)");
+            boolean another = textUI.readBooleanFromUser();
+            if (another) {
+                PatientSortByName e = new PatientSortByName();
+                patientList.sort(e);
+                for (int k = 0 ; k<patientList.size() ; k++){
+                    textUI.display(patientList.get(k).getLastName() + " owes : $" + getTotalPayments(appointment, patientList.get(k)));
+                }
+            }
+        }
+    }
+
+    /**
+     * returns total payments due
+     * @param e the list its comparing to
+     * @return the total amount due
+     */
+    public double getTotalPayments(AppointmentList e, Patient p) {
+        double total = 0;
+        Calendar cal = Calendar.getInstance();
+        for (int i = 0; i < e.size(); i++) {
+            for (int j = 0; j < e.get(i).getProcedures().size(); j++) {
+                if (e.get(i).getProcedures().get(j).getPatient().equals(p)){
+                    if(e.get(i).getTime().before(cal)){
+                        total += e.get(i).getProcedures().get(j).getAmount();
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
     private void productionView() throws IOException {
         Calendar min = makeMinTime();
         Calendar max = makeMaxTime();
         textUI.display("Would you like these to be grouped by day(0) or month(1)?");
         boolean choice = textUI.readBooleanFromUser();
-        if (choice){
-            for (int i = 0 ; i<appointment.size() ; i++){
-                if(appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)){
+        if (choice) {
+            for (int i = 0; i < appointment.size(); i++) {
+                if (appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)) {
                     int temp = appointment.get(i).getTime().get(Calendar.DATE);
                     textUI.display(temp + " \n" + appointment.get(i).toString());
                 }
             }
-        }else if(!choice){
-            for (int i = 0 ; i<appointment.size() ; i++){
-                if(appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)){
+        } else if (!choice) {
+            for (int i = 0; i < appointment.size(); i++) {
+                if (appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)) {
                     int temp = appointment.get(i).getTime().get(Calendar.MONTH);
                     textUI.display(temp + " \n" + appointment.get(i).toString());
                 }
@@ -997,5 +1034,16 @@ public class DentistManager {
         options.put(EXIT, "Exit");
         options.put(REPORTS, "Reports");
         return options;
+    }
+}
+
+/**
+ * class that compares patients by name
+ */
+class PatientSortByName implements Comparator<Patient> {
+
+    @Override
+    public int compare(Patient o1, Patient o2) {
+        return o1.getLastName().compareTo(o2.getLastName());
     }
 }
