@@ -107,7 +107,7 @@ public class PatientImpl extends PersonImpl implements Patient, Serializable {
      */
     @Override
     public int getId() {
-        return this.ID;
+        return super.getID();
     }
 
     /**
@@ -117,10 +117,7 @@ public class PatientImpl extends PersonImpl implements Patient, Serializable {
      */
     @Override
     public void setId(int id) {
-        if (id == 0) {
-            throw new IllegalArgumentException("Need to enter an ID");
-        }
-        this.ID = id;
+        super.setID(id);
     }
 
     @Override

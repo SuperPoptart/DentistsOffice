@@ -1,12 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * represents an appointment
  */
-public class Appointment {
+public class Appointment implements Serializable{
 
     private Calendar time;
     private ProcedureList procedures;
@@ -102,8 +103,8 @@ public class Appointment {
         StringBuilder sb = new StringBuilder();
         for (int i = 0 ; i<procedures.size() ; i++){
             sb.append(procedures.get(i).toString());
-            if (i < procedures.size()){
-                sb.append(", ");
+            if (i < procedures.size() - 1){
+                sb.append(" ; ");
             }
         }
         return sb.toString();

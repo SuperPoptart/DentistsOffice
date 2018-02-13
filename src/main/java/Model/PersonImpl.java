@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * represents a person
  */
-public class PersonImpl implements Person, Comparable<Person>, Serializable {
+public abstract class PersonImpl implements Person, Comparable<Person>, Serializable {
 
     private String firstName;
     private String lastName;

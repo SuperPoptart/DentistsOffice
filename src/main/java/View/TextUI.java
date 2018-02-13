@@ -46,7 +46,7 @@ public class TextUI {
      * @return - the choice
      * @throws IOException - throws
      */
-    private int readIntFromUser(Set<Integer> validValues) throws IOException {
+    public int readIntFromUser(Set<Integer> validValues) throws IOException {
 
         while (true) {
             String rawString = in.readLine();

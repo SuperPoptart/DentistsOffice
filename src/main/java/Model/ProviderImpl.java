@@ -57,8 +57,9 @@ public class ProviderImpl extends PersonImpl implements Provider, Serializable {
      *
      * @return id
      */
+    @Override
     public int getId() {
-        return this.id;
+        return super.getID();
     }
 
     /**
@@ -66,11 +67,9 @@ public class ProviderImpl extends PersonImpl implements Provider, Serializable {
      *
      * @param id id
      */
+    @Override
     public void setId(int id) {
-        if (id == 0) {
-            throw new IllegalArgumentException("You must enter an id");
-        }
-        this.id = id;
+        super.setID(id);
     }
 
     @Override

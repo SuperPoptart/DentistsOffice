@@ -4,10 +4,7 @@ import Model.*;
 import View.TextUI;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DentistManager {
 
@@ -22,6 +19,7 @@ public class DentistManager {
     private static final int EDIT_PROVIDERS = 2;
     private static final int EDIT_PATIENTS = 3;
     private static final int VIEW_APPOINTMENTS = 4;
+    private static final int REPORTS = 6;
     private static final int EXIT = 5;
 
     public DentistManager() throws IOException {
@@ -33,14 +31,11 @@ public class DentistManager {
         this.loadUser();
         this.loadPatient();
         this.loadProvider();
-//        this.loadAppointment();
+        this.loadAppointment();
     }
 
     public void run() throws IOException {
         boolean exitTime = false;
-
-        displayPatients();
-        displayProviders();
         checkEmpty();
 
         while (!exitTime) {
@@ -71,6 +66,10 @@ public class DentistManager {
                         this.saveProvider();
                         this.saveAppointment();
                         exitTime = false;
+                        break;
+                    case REPORTS:
+                        reportView();
+                        break;
                     default:
 
                 }
@@ -95,12 +94,71 @@ public class DentistManager {
                         this.saveProvider();
                         this.saveAppointment();
                         exitTime = false;
+                        break;
+                    case REPORTS:
+                        reportView();
+                        break;
                     default:
 
                 }
             }
         }
 
+    }
+
+    private void reportView() throws IOException {
+        final int PRODUCTION = 1, PATIENT_BALANCE = 2, COLLECTIONS = 3, QUIT = 4;
+
+        Map<Integer, String> reportMenu = new HashMap<>();
+        reportMenu.put(PRODUCTION, "Production");
+        reportMenu.put(PATIENT_BALANCE, "Patient Balance");
+        reportMenu.put(COLLECTIONS, "Collections");
+        reportMenu.put(QUIT, "Go Back");
+
+        int selection = this.textUI.showMenu(reportMenu);
+        switch (selection) {
+            case (PRODUCTION):
+                productionView();
+                break;
+            case (PATIENT_BALANCE):
+//                patientBalance();
+                break;
+            case (COLLECTIONS):
+//                collections();
+                break;
+            case (QUIT):
+                break;
+            default:
+                throw new IllegalArgumentException("Did not expect: " + selection);
+        }
+    }
+
+    private void productionView() throws IOException {
+        Calendar min = makeMinTime();
+        Calendar max = makeMaxTime();
+        textUI.display("Would you like these to be grouped by day(0) or month(1)?");
+        boolean choice = textUI.readBooleanFromUser();
+        if (choice){
+            for (int i = 0 ; i<appointment.size() ; i++){
+                if(appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)){
+                    int temp = appointment.get(i).getTime().get(Calendar.DATE);
+                    textUI.display(temp + " \n" + appointment.get(i).toString());
+                }
+            }
+        }else if(!choice){
+            for (int i = 0 ; i<appointment.size() ; i++){
+                if(appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)){
+                    int temp = appointment.get(i).getTime().get(Calendar.MONTH);
+                    textUI.display(temp + " \n" + appointment.get(i).toString());
+                }
+            }
+        }
+    }
+
+    private void displayAppointments() {
+        for (int i = 0; i < appointment.size(); i++) {
+            textUI.display((i + 1) + ". " + appointment.get(i).toString());
+        }
     }
 
     private void changePassword() throws IOException {
@@ -118,7 +176,7 @@ public class DentistManager {
                         runnin = false;
                     }
                 }
-            }else{
+            } else {
                 textUI.display("Please enter your CURRENT password");
                 holding = textUI.readStringFromUser();
             }
@@ -167,7 +225,7 @@ public class DentistManager {
     private void removePatient() throws IOException {
         int hold;
         textUI.display("Enter the patients id you'd like to delete:");
-        hold = readIdforPatient();
+        hold = textUI.readIntFromUser();
         for (int i = 0; i < patientList.size(); i++) {
             if (patientList.get(i).getId() == hold) {
                 patientList.remove(i);
@@ -183,7 +241,7 @@ public class DentistManager {
             if (patientList.get(i).getId() == hold) {
                 patientList.remove(i);
                 addPatient();
-            }
+            } else textUI.display("This patient doesn't exist!");
         }
     }
 
@@ -214,6 +272,17 @@ public class DentistManager {
         mId = textUI.readStringFromUser();
         Insurance insurance = InsuranceFactory.getInstance(cName, gId, mId);
         Patient patient = PatientFactory.getInstance(fName, lName, id, pNum, (InsuranceImpl) insurance, pCard);
+        boolean patientCheck = readIdforPatientImp(patient);
+        int ids;
+        while (!patientCheck) {
+            if (readIdforPatientImp(patient)) {
+                patientCheck = true;
+            } else if (!readIdforPatientImp(patient)) {
+                textUI.display("That id is in use, please type another one!");
+                ids = textUI.readIntFromUser();
+                patient = PatientFactory.getInstance(fName, lName, ids, pNum, (InsuranceImpl) insurance, pCard);
+            }
+        }
         patientList.add(patient);
     }
 
@@ -233,10 +302,10 @@ public class DentistManager {
                 addAppointment();
                 break;
             case (EDIT):
-//                editAppointment();
+                editAppointment();
                 break;
             case (REMOVE):
-//                removeAppointment();
+                removeAppointment();
                 break;
             case (SEARCH):
                 searchAppointment();
@@ -248,81 +317,95 @@ public class DentistManager {
 
     private void searchAppointment() throws IOException {
         final int TIME = 1, PROVIDER = 2, PATIENT = 3, PROCEDURE = 4, QUIT = 5;
+        AppointmentList second = new AppointmentList();
+        second.clear();
+        second = appointment;
+        boolean response;
 
-        Map<Integer, String> searchMenu = new HashMap<>();
-        searchMenu.put(TIME, "By Time");
-        searchMenu.put(PROVIDER, "By Provider");
-        searchMenu.put(PATIENT, "By Patient");
-        searchMenu.put(PROCEDURE, "By Procedure");
-        searchMenu.put(QUIT, "Go Back");
-
-        int selection = this.textUI.showMenu(searchMenu);
-        switch (selection) {
-            case (TIME):
-                appTimeSearch();
-                break;
-            case (PROVIDER):
-                appProviderSearch();
-                break;
-            case (PATIENT):
-                appPatientSearch();
-                break;
-            case (PROCEDURE):
-                appProcedureSearch();
-                break;
-            case (QUIT):
-                break;
-            default:
-                this.textUI.display(selection + " is not valid selection.");
+        textUI.display("Would you like to search by time? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appTimeSearch(second);
+        } else {
         }
+        textUI.display("Would you like to search by Provider? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appProviderSearch(second);
+        } else {
+        }
+        textUI.display("Would you like to search by Patient? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appPatientSearch(second);
+        } else {
+        }
+        textUI.display("Would you like to search by Procedure? (0 = y/n = 1)");
+        response = textUI.readBooleanFromUser();
+        if (response) {
+            appProcedureSearch(second);
+        } else {
+        }
+        for (int i = 0; i < second.size(); i++) {
+            textUI.display(second.get(i).toString());
+        }
+
     }
 
-    private void appProcedureSearch() throws IOException {
+    private void appProcedureSearch(AppointmentList appointment) throws IOException {
         this.textUI.display("What is the Procedure code you wish to see?");
         String lookUp = this.textUI.readStringFromUser();
         for (int i = 0; i < appointment.size(); i++) {
             for (int j = 0; i < appointment.get(i).getProcedures().size(); j++) {
                 if (appointment.get(i).getProcedures().get(j).getCode().equalsIgnoreCase(lookUp)) {
-                    this.textUI.display(appointment.get(i).toString());
+
+                } else {
+                    appointment.remove(i);
                 }
             }
         }
     }
 
-    private void appPatientSearch() throws IOException {
+    private void appPatientSearch(AppointmentList appointment) throws IOException {
         this.textUI.display("What is the ID number of the Patient you with to see?");
         int lookUp = this.textUI.readIntFromUser();
 
         for (int i = 0; i < appointment.size(); i++) {
             for (int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
                 if (appointment.get(i).getProcedures().get(j).getPatient().getId() == lookUp) {
-                    this.textUI.display(appointment.get(i).toString());
+
+                } else {
+                    appointment.remove(i);
                 }
             }
         }
     }
 
-    private void appProviderSearch() throws IOException {
+    private void appProviderSearch(AppointmentList appointment) throws IOException {
         this.textUI.display("What is the ID number of the Provider you with to see?");
         int lookUp = this.textUI.readIntFromUser();
 
         for (int i = 0; i < appointment.size(); i++) {
             for (int j = 0; j < appointment.get(i).getProcedures().size(); j++) {
                 if (appointment.get(i).getProcedures().get(j).getProvider().getId() == lookUp) {
-                    this.textUI.display(appointment.get(i).toString());
+
+                } else {
+                    appointment.remove(i);
                 }
             }
         }
 
     }
 
-    private void appTimeSearch() throws IOException {
+    private void appTimeSearch(AppointmentList appointment) throws IOException {
         Calendar max = makeMaxTime();
         Calendar min = makeMinTime();
 
         for (int i = 0; i < appointment.size(); i++) {
             if (appointment.get(i).getTime().getTimeInMillis() < max.getTimeInMillis() && appointment.get(i).getTime().getTimeInMillis() > min.getTimeInMillis()) {
-                this.textUI.display(appointment.get(i).toString());
+
+            } else {
+                appointment.remove(i);
             }
         }
 
@@ -364,12 +447,43 @@ public class DentistManager {
         return max;
     }
 
-    private void removeAppointment() {
-
+    private void removeAppointment() throws IOException {
+        int holdin;
+        displayAppointments();
+        textUI.display("\nEnter the appointment number on the list you'd like to remove!");
+        Set<Integer> valid = new TreeSet<Integer>();
+        int MAX = appointment.size();
+        Collection<Integer> addin = new TreeSet<Integer>();
+        for (int i = 0; i < MAX; i++) {
+            addin.add(i + 1);
+        }
+        valid.addAll(addin);
+        holdin = textUI.readIntFromUser(valid);
+        for (int i = 0; i < appointment.size(); i++) {
+            if (i == holdin - 1) {
+                appointment.remove(i);
+            }
+        }
     }
 
-    private void editAppointment() {
-        //edit a specified appointment
+    private void editAppointment() throws IOException {
+        int holdin;
+        displayAppointments();
+        textUI.display("\nEnter the appointment number on the list you'd like to edit!");
+        Set<Integer> valid = new TreeSet<Integer>();
+        int MAX = appointment.size();
+        Collection<Integer> addin = new TreeSet<Integer>();
+        for (int i = 0; i < MAX; i++) {
+            addin.add(i + 1);
+        }
+        valid.addAll(addin);
+        holdin = textUI.readIntFromUser(valid);
+        for (int i = 0; i < appointment.size(); i++) {
+            if (i == holdin - 1) {
+                appointment.remove(i);
+            }
+        }
+        addAppointment();
     }
 
     private void addAppointment() throws IOException {
@@ -392,7 +506,11 @@ public class DentistManager {
 
         while (!isDone) {
             final int ADD = 1, REMOVE = 2, QUIT = 3;
-            int selection = this.textUI.readIntFromUser();
+            Map<Integer, String> options = new HashMap<>();
+            options.put(ADD, "Add Procedure");
+            options.put(REMOVE, "Remove Procedure");
+            options.put(QUIT, "Quit");
+            int selection = textUI.showMenu(options);
             switch (selection) {
                 case (ADD):
                     tmp.add(addProcedure());
@@ -443,35 +561,39 @@ public class DentistManager {
 
     // concerned on the implementation of this class.
     private Patient addProcedurePatient() throws IOException {
-        boolean isPatient = false;
-        int lookUp = 0;
-        while (!isPatient) {
-            this.textUI.display("What is the Patient ID you wish to associate with this Procedure?");
-            lookUp = this.textUI.readIntFromUser();
+        textUI.display("Enter the ID of the patient for this procedure:");
+        int idHoldin;
+        boolean runner = true;
+        idHoldin = textUI.readIntFromUser();
+        while (runner) {
             for (int i = 0; i < patientList.size(); i++) {
-                if (lookUp == patientList.get(i).getId()) {
-                    return patientList.get(i);
+                if (patientList.get(i).getId() == idHoldin) {
+                    return this.patientList.get(i);
                 }
             }
-            this.textUI.display("The Patient ID was not found please try again.");
+            textUI.display("Sorry this patient doesn't exit, try again!");
+            idHoldin = textUI.readIntFromUser();
         }
-        return patientList.get(0);
+        Patient dont_be_here = PatientFactory.getInstance();
+        return dont_be_here;
     }
 
     private Provider addProcedureProvider() throws IOException {
-        boolean isProvider = false;
-        int lookUp = 0;
-        while (!isProvider) {
-            this.textUI.display("What is the Provider ID associated with this procedure?");
-            lookUp = this.textUI.readIntFromUser();
+        textUI.display("Enter the ID of the provider for this procedure:");
+        int idHoldin;
+        boolean runner = true;
+        idHoldin = textUI.readIntFromUser();
+        while (runner) {
             for (int i = 0; i < providerList.size(); i++) {
-                if (lookUp == providerList.get(i).getId()) {
-                    return providerList.get(i);
+                if (providerList.get(i).getId() == idHoldin) {
+                    return this.providerList.get(i);
                 }
             }
-            this.textUI.display("The provider ID was not found please try again.");
+            textUI.display("Sorry this provider doesn't exit, try again!");
+            idHoldin = textUI.readIntFromUser();
         }
-        return providerList.get(0);
+        Provider dont_be_here = ProviderFactory.getInstance();
+        return dont_be_here;
     }
 
     private String addProcedureCode() throws IOException {
@@ -513,6 +635,8 @@ public class DentistManager {
             if (amt == 0 || amt < 0) {
                 this.textUI.display("What is the cost of this procedure?");
                 amt = this.textUI.getDoubleFromUser();
+            } else {
+                return amt;
             }
         }
         return amt;
@@ -568,12 +692,12 @@ public class DentistManager {
     private void editProvider() throws IOException {
         int hold;
         textUI.display("Enter the providers id you'd like to change:");
-        hold = readIdforProvider();
+        hold = textUI.readIntFromUser();
         for (int i = 0; i < providerList.size(); i++) {
             if (providerList.get(i).getId() == hold) {
                 providerList.remove(i);
                 addProvider();
-            }
+            } else textUI.display("This provider doesn't exist!");
         }
     }
 
@@ -589,22 +713,43 @@ public class DentistManager {
         textUI.display("Enter their Title");
         title = textUI.readStringFromUser();
         textUI.display("Enter their ID");
-        id = readIdforProvider();
+        id = textUI.readIntFromUser();
         Provider provider = ProviderFactory.getInstance(fName, lName, id, title);
-        providerList.add(provider);
-    }
-
-    private int readIdforProvider() throws IOException {
-
-        int holdin;
-        holdin = textUI.readIntFromUser();
-        for (int i = 0; i < providerList.size(); i++) {
-            if (holdin == providerList.get(i).getId()) {
-                textUI.display("That id is taken try a different one");
-                holdin = textUI.readIntFromUser();
+        boolean justKillMe = readIdforProvider(provider);
+        int ids;
+        while (!justKillMe) {
+            if (readIdforProvider(provider)) {
+                justKillMe = true;
+            } else if (!readIdforProvider(provider)) {
+                textUI.display("That id is in use, please type another one!");
+                ids = textUI.readIntFromUser();
+                provider = ProviderFactory.getInstance(fName, lName, ids, title);
             }
         }
-        return holdin;
+        providerList.add(provider);
+
+    }
+
+    private boolean readIdforProvider(Provider provider) throws IOException {
+
+        for (int i = 0; i < providerList.size(); i++) {
+            if (providerList.get(i).equals(provider)) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    private boolean readIdforPatientImp(Patient patient) throws IOException {
+
+        for (int i = 0; i < patientList.size(); i++) {
+            if (patientList.get(i).equals(patient)) {
+                return false;
+            }
+        }
+        return true;
+
     }
 
     private int readIdforPatient() throws IOException {
@@ -628,7 +773,7 @@ public class DentistManager {
     private void removeProvider() throws IOException {
         int hold;
         textUI.display("Enter the providers id you'd like to delete:");
-        hold = readIdforProvider();
+        hold = textUI.readIntFromUser();
         for (int i = 0; i < providerList.size(); i++) {
             if (providerList.get(i).getId() == hold) {
                 providerList.remove(i);
@@ -849,6 +994,7 @@ public class DentistManager {
         options.put(EDIT_PATIENTS, "Edit Patients");
         options.put(VIEW_APPOINTMENTS, "View Appointments");
         options.put(EXIT, "Exit");
+        options.put(REPORTS, "Reports");
         return options;
     }
 }
