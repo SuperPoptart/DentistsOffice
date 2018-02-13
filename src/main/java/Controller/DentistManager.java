@@ -134,7 +134,20 @@ public class DentistManager {
         }
     }
 
-    private void collections() {
+    private void collections() throws IOException {
+        Calendar min = makeMinTime();
+        Calendar max = makeMaxTime();
+        double amount = 0;
+
+        for (int i = 0; i < appointment.size(); i++) {
+            for (int j = 0; j < appointment.get(i).getProcedures().size(); j++)
+                if (appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)) {
+                    amount += appointment.get(i).getProcedures().get(j).getAmount();
+                }
+        }
+
+        textUI.display("Between " + max.getTime() + " and " + min.getTime() + " the office made $" + amount);
+
     }
 
     private void patientBalance() throws IOException {
