@@ -11,5 +11,8 @@ public class AppointmentList extends ArrayList<Appointment> implements Serializa
     public void test() {
         System.out.println("please update");
     }
+
+    public void sort() {
+    }
     //sumAppointmentCosts?
 }

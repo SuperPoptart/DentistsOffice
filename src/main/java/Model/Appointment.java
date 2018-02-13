@@ -3,11 +3,12 @@ package Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 
 /**
  * represents an appointment
  */
-public class Appointment implements Serializable{
+public class Appointment implements Serializable, Comparator<Procedure>{
 
     private Calendar time;
     private ProcedureList procedures;
@@ -108,5 +109,10 @@ public class Appointment implements Serializable{
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    public int compare(Procedure o1, Procedure o2) {
+        return 0;
     }
 }

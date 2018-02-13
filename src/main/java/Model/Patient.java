@@ -17,4 +17,6 @@ public interface Patient {
     public int getId();
 
     public void setId(int id);
+
+    public String getLastName();
 }
