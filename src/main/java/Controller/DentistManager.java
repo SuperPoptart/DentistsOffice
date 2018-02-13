@@ -23,6 +23,7 @@ public class DentistManager {
     private static final int EXIT = 5;
 
     public DentistManager() throws IOException {
+        String help = "plz work";
         appointment = new AppointmentList();
         usersList = new UserList();
         providerList = new ProviderList();
