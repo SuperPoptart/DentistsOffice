@@ -121,15 +121,37 @@ public class DentistManager {
                 productionView();
                 break;
             case (PATIENT_BALANCE):
-                patientBalance();
+//                patientBalance();
                 break;
             case (COLLECTIONS):
-                collections();
+//                collections();
                 break;
             case (QUIT):
                 break;
             default:
                 throw new IllegalArgumentException("Did not expect: " + selection);
+        }
+    }
+
+    private void productionView() throws IOException {
+        Calendar min = makeMinTime();
+        Calendar max = makeMaxTime();
+        textUI.display("Would you like these to be grouped by day(0) or month(1)?");
+        boolean choice = textUI.readBooleanFromUser();
+        if (choice){
+            for (int i = 0 ; i<appointment.size() ; i++){
+                if(appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)){
+                    int temp = appointment.get(i).getTime().get(Calendar.DATE);
+                    textUI.display(temp + " \n" + appointment.get(i).toString());
+                }
+            }
+        }else if(!choice){
+            for (int i = 0 ; i<appointment.size() ; i++){
+                if(appointment.get(i).getTime().after(min) && appointment.get(i).getTime().before(max)){
+                    int temp = appointment.get(i).getTime().get(Calendar.MONTH);
+                    textUI.display(temp + " \n" + appointment.get(i).toString());
+                }
+            }
         }
     }
 
