@@ -23,7 +23,7 @@ public class DentistManager {
     private static final int EXIT = 5;
 
     public DentistManager() throws IOException {
-        String help = "plz work";
+//        String help = "plz work";
         appointment = new AppointmentList();
         usersList = new UserList();
         providerList = new ProviderList();
@@ -677,21 +677,30 @@ public class DentistManager {
 
     private String addProcedureCode() throws IOException {
         boolean isValid = false;
-        String lookUp = "";
+        int lookUp;
         while (!isValid) {
-            this.textUI.display("What is the code for this Procedure?");
-            lookUp = this.textUI.readStringFromUser();
-            isValid = verifyCode(lookUp);
+            this.textUI.display("What is the code for this Procedure? (Just the digits.)");
+            lookUp = this.textUI.readIntFromUser();
+            if(verifyCode(lookUp) == true) {
+                return ("D" + lookUp);
+            }
+            this.textUI.display(lookUp + " was not a valid input codes must be between 100000 and 999999");
+
         }
-        return lookUp;
+        return "";
+
     }
 
-    private boolean verifyCode(String lookUp) {
-        int codeSize = 6;
-        String[] codeCheck = new String[codeSize];
-        //how would I do this one?
-        //returns true for good, and false for not.
-        return true;
+    private boolean verifyCode(int lookUp) {
+        int maxCode = 99999;
+        int minCode = 1000000;
+        if(lookUp > minCode && lookUp < maxCode){
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
     private String addProcedureDescription() throws IOException {
