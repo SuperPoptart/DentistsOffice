@@ -183,4 +183,95 @@ public class TextUI {
             out.println("Please enter a number in proper format");
         }
     }
+
+    public int readYearFromUser() throws IOException {
+        int year;
+        int minYear = 1000;
+        while(true) {
+            try {
+                year = Integer.parseInt(in.readLine());
+                if(year > minYear){
+                    return year;
+                }
+            }
+            catch(NumberFormatException ex) {
+
+            }
+            out.println("Please enter a valid 4 digit year.");
+        }
+    }
+
+    public int readMonthFromUser() throws IOException {
+        int month;
+        int maxMonth = 12;
+        int minMonth = 1;
+        while(true) {
+            try {
+                month = Integer.parseInt(in.readLine());
+                if(month <=maxMonth && month >= minMonth) {
+                    return month--;
+                }
+            }
+            catch(NumberFormatException ex) {
+
+            }
+            out.println("Please enter a valid month (1-12)");
+
+        }
+    }
+
+    public int readDayFromUser() throws IOException {
+        int day;
+        int maxDay = 31;
+        int minDay = 1;
+        while(true) {
+            try {
+                day = Integer.parseInt(in.readLine());
+                if(day <= maxDay && day >= minDay) {
+                    return day;
+                }
+            }
+            catch(NumberFormatException ex) {
+
+            }
+            out.println("Please enter a valid day (1-31");
+        }
+    }
+
+    public int readHourFromUser() throws IOException {
+        int hour;
+        int maxHour = 24;
+        int minHour = 1;
+        while(true) {
+            try {
+                hour = Integer.parseInt(in.readLine());
+                if(hour <= maxHour && hour >= minHour) {
+                    return hour--;
+                }
+            }
+            catch(NumberFormatException ex) {
+
+            }
+            out.println("Please enter a valid hour (1-24");
+        }
+    }
+
+    public int readMinuteFromUser() throws IOException {
+        int minute;
+        int maxMin = 59;
+        int minMin = 0;
+        while(true) {
+            try {
+                minute = Integer.parseInt(in.readLine());
+                if(minute <= maxMin && minute >= minMin) {
+                    return minute;
+                }
+            }
+            catch(NumberFormatException ex) {
+
+            }
+            out.println("Please enter a valid minute (0-59)");
+        }
+    }
 }
+

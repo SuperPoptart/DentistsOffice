@@ -330,16 +330,16 @@ public class DentistManager {
 
     private Calendar makeMinTime() throws IOException {
         Calendar min = Calendar.getInstance();
-        this.textUI.display("What is the earliest year you wish to see? (IE 00)");
-        int minYear = this.textUI.readIntFromUser();
-        this.textUI.display("What is the earliest month in this year you wish to see?(IE 00)");
-        int minMonth = this.textUI.readIntFromUser();
-        this.textUI.display("What is the earliest day of the month you wish to see? (IE 00)");
-        int minDay = this.textUI.readIntFromUser();
-        this.textUI.display("What is the earliest hour in this day you wish to see? (IE 00)");
-        int minHour = this.textUI.readIntFromUser();
-        this.textUI.display("What is the earliest minute in this hour you with to see?");
-        int minMin = this.textUI.readIntFromUser();
+        this.textUI.display("What is the earliest year you wish to see? (IE 1000)");
+        int minYear = this.textUI.readYearFromUser();
+        this.textUI.display("What is the earliest month in this year you wish to see?(IE 1-12)");
+        int minMonth = this.textUI.readMonthFromUser();
+        this.textUI.display("What is the earliest day of the month you wish to see? (IE 1-31)");
+        int minDay = this.textUI.readDayFromUser();
+        this.textUI.display("What is the earliest hour in this day you wish to see? (IE 1-24)");
+        int minHour = this.textUI.readHourFromUser();
+        this.textUI.display("What is the earliest minute in this hour you with to see? (IE 1-59)");
+        int minMin = this.textUI.readMinuteFromUser();
 
         min.set(minYear, minMonth, minDay, minHour, minMin);
 
@@ -348,16 +348,16 @@ public class DentistManager {
 
     private Calendar makeMaxTime() throws IOException {
         Calendar max = Calendar.getInstance();
-        this.textUI.display("What is the latest year you wish to see? (IE 00)");
-        int maxYear = this.textUI.readIntFromUser();
-        this.textUI.display("What is the latest month in this year you wish to see?(IE 00)");
-        int maxMonth = this.textUI.readIntFromUser();
-        this.textUI.display("What is the latest day of the month you wish to see? (IE 00)");
-        int maxDay = this.textUI.readIntFromUser();
-        this.textUI.display("What is the latest hour in this day you wish to see? (IE 00)");
-        int maxHour = this.textUI.readIntFromUser();
-        this.textUI.display("What is the latest minute in this hour you with to see?");
-        int maxMin = this.textUI.readIntFromUser();
+        this.textUI.display("What is the latest year you wish to see? (IE 1000)");
+        int maxYear = this.textUI.readYearFromUser();
+        this.textUI.display("What is the latest month in this year you wish to see?(IE 1-12)");
+        int maxMonth = this.textUI.readMonthFromUser();
+        this.textUI.display("What is the latest day of the month you wish to see? (IE 1-31)");
+        int maxDay = this.textUI.readDayFromUser();
+        this.textUI.display("What is the latest hour in this day you wish to see? (IE 1-24)");
+        int maxHour = this.textUI.readHourFromUser();
+        this.textUI.display("What is the latest minute in this hour you with to see? (IE 1-59)");
+        int maxMin = this.textUI.readMinuteFromUser();
 
         max.set(maxYear, maxMonth, maxDay, maxHour, maxMin);
 
@@ -446,17 +446,16 @@ public class DentistManager {
         boolean isPatient = false;
         int lookUp = 0;
         while (!isPatient) {
-            this.textUI.display("What is the Patient ID you with to associate with this Procedure?");
+            this.textUI.display("What is the Patient ID you wish to associate with this Procedure?");
             lookUp = this.textUI.readIntFromUser();
             for (int i = 0; i < patientList.size(); i++) {
                 if (lookUp == patientList.get(i).getId()) {
-                    lookUp = i;
-                    isPatient = true;
+                    return patientList.get(i);
                 }
             }
             this.textUI.display("The Patient ID was not found please try again.");
         }
-        return patientList.get(lookUp);
+        return patientList.get(0);
     }
 
     private Provider addProcedureProvider() throws IOException {
@@ -467,13 +466,12 @@ public class DentistManager {
             lookUp = this.textUI.readIntFromUser();
             for (int i = 0; i < providerList.size(); i++) {
                 if (lookUp == providerList.get(i).getId()) {
-                    lookUp = i;
-                    isProvider = true;
+                    return providerList.get(i);
                 }
             }
             this.textUI.display("The provider ID was not found please try again.");
         }
-        return providerList.get(lookUp);
+        return providerList.get(0);
     }
 
     private String addProcedureCode() throws IOException {
@@ -524,16 +522,16 @@ public class DentistManager {
     private Calendar makeAppTime() throws IOException {
         Calendar tmp = Calendar.getInstance();
 
-        this.textUI.display("What is the year for this appointment? (IE 0000)");
-        int appYear = textUI.readIntFromUser();
-        this.textUI.display("What is the month for this appointment??(IE 00)");
-        int appMonth = textUI.readIntFromUser();
-        this.textUI.display("What is the day for this appointment?? (IE 00)");
-        int appDay = textUI.readIntFromUser();
-        this.textUI.display("What is the hour for this appointment?? (IE 00)");
-        int appHour = textUI.readIntFromUser();
-        this.textUI.display("What is the minute for this appointment??");
-        int appMin = textUI.readIntFromUser();
+        this.textUI.display("What is the year for this appointment? (IE 1000)");
+        int appYear = textUI.readYearFromUser();
+        this.textUI.display("What is the month for this appointment??(IE 1-12)");
+        int appMonth = textUI.readMonthFromUser();
+        this.textUI.display("What is the day for this appointment?? (IE 1-31)");
+        int appDay = textUI.readDayFromUser();
+        this.textUI.display("What is the hour for this appointment?? (IE 1-23)");
+        int appHour = textUI.readHourFromUser();
+        this.textUI.display("What is the minute for this appointment?? (IE 0-59)");
+        int appMin = textUI.readMinuteFromUser();
 
         tmp.set(appYear, appMonth, appDay, appHour, appMin);
 
